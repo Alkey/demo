@@ -7,19 +7,15 @@ import com.example.demo.exception.ClientAlreadyExistsException;
 import com.example.demo.exception.PasswordMismatchException;
 import com.example.demo.repository.ClientRepository;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 
-@ExtendWith(MockitoExtension.class)
 public class ClientServiceImplTest {
     private static final String CLIENT_NAME = "User";
     private static final String PASSWORD = "123";
@@ -27,8 +23,7 @@ public class ClientServiceImplTest {
     private static final Long ID = 1L;
     private final ClientRepository clientRepository = mock(ClientRepository.class);
     private final PasswordEncoder encoder = mock(PasswordEncoder.class);
-    @InjectMocks
-    private ClientServiceImpl service;
+    private final ClientServiceImpl service = new ClientServiceImpl(clientRepository, encoder);
 
     @Test
     public void shouldThrowPasswordMismatchExceptionWhenTryAddClient() {
@@ -76,7 +71,7 @@ public class ClientServiceImplTest {
         when(encoder.encode(PASSWORD)).thenReturn(ENCODED_PASSWORD);
         when(clientRepository.save(client)).thenReturn(savedClient);
 
-        assertEquals(savedClient.getId(), service.add(dto));
+        assertThat(ID, is(service.add(dto)));
 
         verify(clientRepository).findClientByName(CLIENT_NAME);
         verify(encoder).encode(PASSWORD);
