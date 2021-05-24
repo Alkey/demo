@@ -28,11 +28,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout()
                 .and()
                 .authorizeRequests()
-                .antMatchers("/clients/*").permitAll();
+                .antMatchers("/clients/add").permitAll()
+                .antMatchers("/clients/role").hasRole("ADMIN");
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder builder) throws Exception {
+        builder.inMemoryAuthentication()
+                .withUser("admin")
+                .password(passwordEncoder().encode("admin"))
+                .roles("ADMIN");
         builder
                 .userDetailsService(userDetailsService)
                 .passwordEncoder(passwordEncoder());
