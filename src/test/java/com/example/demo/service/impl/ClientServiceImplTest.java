@@ -9,15 +9,14 @@ import com.example.demo.repository.ClientRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -26,15 +25,13 @@ public class ClientServiceImplTest {
     private static final String PASSWORD = "123";
     private static final String ENCODED_PASSWORD = "encoded_password";
     private static final Long ID = 1L;
-    @Mock
-    private ClientRepository clientRepository;
-    @Mock
-    private PasswordEncoder encoder;
+    private final ClientRepository clientRepository = mock(ClientRepository.class);
+    private final PasswordEncoder encoder = mock(PasswordEncoder.class);
     @InjectMocks
     private ClientServiceImpl service;
 
     @Test
-    public void shouldThrowPasswordMismatchException_whenTryAddClient() {
+    public void shouldThrowPasswordMismatchExceptionWhenTryAddClient() {
         ClientCreateDto dto = ClientCreateDto.builder()
                 .name(CLIENT_NAME)
                 .password(PASSWORD)
@@ -45,7 +42,7 @@ public class ClientServiceImplTest {
     }
 
     @Test
-    public void shouldThrowUserAlreadyExistException_whenTryAddClient() {
+    public void shouldThrowUserAlreadyExistExceptionWhenTryAddClient() {
         ClientCreateDto dto = ClientCreateDto.builder()
                 .name(CLIENT_NAME)
                 .password(PASSWORD)
@@ -58,7 +55,7 @@ public class ClientServiceImplTest {
     }
 
     @Test
-    public void shouldAddClient_whenDtoCorrect() {
+    public void shouldAddClientWhenDtoCorrect() {
         ClientCreateDto dto = ClientCreateDto.builder()
                 .name(CLIENT_NAME)
                 .password(PASSWORD)
@@ -79,10 +76,9 @@ public class ClientServiceImplTest {
         when(encoder.encode(PASSWORD)).thenReturn(ENCODED_PASSWORD);
         when(clientRepository.save(client)).thenReturn(savedClient);
 
-        service.add(dto);
+        assertEquals(savedClient.getId(), service.add(dto));
 
         verify(clientRepository).findClientByName(CLIENT_NAME);
         verify(encoder).encode(PASSWORD);
-        verify(clientRepository).save(client);
     }
 }
