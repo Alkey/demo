@@ -4,5 +4,5 @@ import com.example.demo.dto.ClientCreateDto;
 
 public interface ClientService {
 
-    Long addClient(ClientCreateDto dto);
+    long add(ClientCreateDto dto);
 }

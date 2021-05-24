@@ -1,11 +1,11 @@
 package com.example.demo.dto;
 
-import lombok.Data;
+import lombok.Value;
 
 import java.util.List;
 
-@Data
+@Value
 public class ExceptionDto {
-    private List<String> messages;
-    private String exceptionName;
+    List<String> messages;
+    String exceptionName;
 }
