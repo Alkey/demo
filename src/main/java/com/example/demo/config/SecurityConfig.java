@@ -1,6 +1,8 @@
 package com.example.demo.config;
 
+import com.example.demo.entity.Role;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -15,6 +17,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    @Value("${admin.password}")
+    private String adminPassword;
     private final UserDetailsService userDetailsService;
 
     @Override
@@ -29,18 +33,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/clients/add").permitAll()
-                .antMatchers("/clients/role").hasRole("ADMIN");
+                .antMatchers("/clients/set-role").hasRole(Role.ADMIN.name());
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder builder) throws Exception {
-        builder.inMemoryAuthentication()
-                .withUser("admin")
-                .password(passwordEncoder().encode("admin"))
-                .roles("ADMIN");
         builder
                 .userDetailsService(userDetailsService)
-                .passwordEncoder(passwordEncoder());
+                .passwordEncoder(passwordEncoder())
+                .and()
+                .inMemoryAuthentication()
+                .withUser("admin")
+                .password(passwordEncoder().encode(adminPassword))
+                .roles(Role.ADMIN.name());
     }
 
     @Bean

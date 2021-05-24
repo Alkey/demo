@@ -1,18 +1,17 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.dto.ClientCreateDto;
-import com.example.demo.dto.RoleDto;
 import com.example.demo.entity.Client;
 import com.example.demo.entity.Role;
 import com.example.demo.exception.ClientAlreadyExistsException;
-import com.example.demo.exception.ClientNotFoundException;
 import com.example.demo.exception.PasswordMismatchException;
-import com.example.demo.exception.RoleParseException;
 import com.example.demo.repository.ClientRepository;
 import com.example.demo.service.ClientService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -30,22 +29,14 @@ public class ClientServiceImpl implements ClientService {
         }
         Client client = new Client();
         client.setName(dto.getName());
-        client.setRole(Role.ROLE_USER);
+        client.setRole(Role.USER);
         client.setPassword(encoder.encode(dto.getPassword()));
         return clientRepository.save(client).getId();
     }
 
     @Override
-    public String setRole(RoleDto dto) {
-        Role role = Role.parse(dto.getRole());
-        if (role == null) {
-            throw new RoleParseException("Incorrect role");
-        }
-        if (dto.getClientId() == null) {
-            throw new ClientNotFoundException("Incorrect id");
-        }
-        Client client = clientRepository.findById(dto.getClientId()).orElseThrow(() -> new ClientNotFoundException("Client not found"));
-        client.setRole(role);
-        return clientRepository.save(client).getRole().name();
+    @Transactional
+    public boolean setRole(Long clientId, Role role) {
+        return clientRepository.updateRole(role, clientId) > 0;
     }
 }
