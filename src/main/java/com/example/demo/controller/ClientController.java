@@ -10,12 +10,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/users")
+@RequestMapping("clients")
 public class ClientController {
     private final ClientService clientService;
 
     @PostMapping("/add")
-    public Long createUser(@RequestBody ClientCreateDto dto) {
-        return clientService.addClient(dto);
+    public long create(@RequestBody ClientCreateDto dto) {
+        return clientService.add(dto);
     }
 }

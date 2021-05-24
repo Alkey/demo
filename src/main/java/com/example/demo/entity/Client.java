@@ -3,7 +3,6 @@ package com.example.demo.entity;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.Set;
 
 @Entity
 @Data
@@ -14,6 +13,6 @@ public class Client {
     private Long id;
     private String name;
     private String password;
-    @ManyToMany(fetch = FetchType.EAGER)
-    private Set<Role> roles;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 }

@@ -1,10 +1,12 @@
 package com.example.demo.dto;
 
-import lombok.Data;
+import lombok.Builder;
+import lombok.Value;
 
-@Data
+@Value
+@Builder
 public class ClientCreateDto {
-    private String name;
-    private String password;
-    private String repeatPassword;
+    String name;
+    String password;
+    String repeatPassword;
 }
