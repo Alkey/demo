@@ -19,7 +19,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler({
             PasswordMismatchException.class,
             ClientAlreadyExistsException.class,
-            ClientNotFoundException.class,
+            ClientNotFoundException.class
     })
     public ExceptionDto handleException(RuntimeException exception) {
         return new ExceptionDto(List.of(exception.getMessage()), exception.getClass().getSimpleName());

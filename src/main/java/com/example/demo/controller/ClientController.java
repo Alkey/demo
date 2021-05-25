@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("clients")
+@RequestMapping("/clients")
 public class ClientController {
     private final ClientService clientService;
 
@@ -20,7 +20,7 @@ public class ClientController {
 
     @PutMapping("/set-role/{clientId}/{role}")
     public ResponseEntity<String> setRole(@PathVariable Long clientId,
-                           @PathVariable Role role) {
+                                          @PathVariable Role role) {
         if (clientService.setRole(clientId, role)) {
             return ResponseEntity.ok().build();
         }
