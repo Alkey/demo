@@ -1,7 +1,6 @@
 package com.example.demo.config;
 
 import com.example.demo.entity.Role;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,11 +14,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
-@RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    @Value("${admin.password}")
-    private String adminPassword;
+    private final String adminPassword;
     private final UserDetailsService userDetailsService;
+
+    public SecurityConfig(@Value("#{environment.PASSWORD}") String adminPassword,
+                          UserDetailsService userDetailsService) {
+        this.adminPassword = adminPassword;
+        this.userDetailsService = userDetailsService;
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
