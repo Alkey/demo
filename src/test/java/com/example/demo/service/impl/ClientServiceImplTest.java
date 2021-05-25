@@ -8,6 +8,7 @@ import com.example.demo.exception.PasswordMismatchException;
 import com.example.demo.repository.ClientRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
 import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -59,13 +60,13 @@ public class ClientServiceImplTest {
         Client client = new Client();
         client.setName(CLIENT_NAME);
         client.setPassword(ENCODED_PASSWORD);
-        client.setRole(Role.ROLE_USER);
+        client.setRole(Role.USER);
 
         Client savedClient = new Client();
         savedClient.setId(ID);
         savedClient.setName(CLIENT_NAME);
         savedClient.setPassword(ENCODED_PASSWORD);
-        savedClient.setRole(Role.ROLE_USER);
+        savedClient.setRole(Role.USER);
 
         when(clientRepository.findClientByName(CLIENT_NAME)).thenReturn(Optional.empty());
         when(encoder.encode(PASSWORD)).thenReturn(ENCODED_PASSWORD);

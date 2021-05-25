@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 @Service
 @RequiredArgsConstructor
 public class ClientServiceImpl implements ClientService {
@@ -27,8 +29,14 @@ public class ClientServiceImpl implements ClientService {
         }
         Client client = new Client();
         client.setName(dto.getName());
-        client.setRole(Role.ROLE_USER);
+        client.setRole(Role.USER);
         client.setPassword(encoder.encode(dto.getPassword()));
         return clientRepository.save(client).getId();
+    }
+
+    @Override
+    @Transactional
+    public boolean setRole(Long clientId, Role role) {
+        return clientRepository.updateRole(role, clientId) > 0;
     }
 }
