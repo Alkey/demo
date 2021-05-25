@@ -24,10 +24,10 @@
             <column name="id" type="int" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="name" type="varchar(150)" >
+            <column name="name" type="varchar(150)">
                 <constraints nullable="false"/>
             </column>
-            <column name="price" type="double" >
+            <column name="price" type="double">
                 <constraints nullable="false"/>
             </column>
         </createTable>
