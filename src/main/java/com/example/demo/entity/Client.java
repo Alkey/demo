@@ -1,18 +1,15 @@
 package com.example.demo.entity;
 
-import lombok.Data;
+import lombok.Value;
 
-import javax.persistence.*;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 
-@Entity
-@Data
-@Table(name = "clients", schema = "public")
+@Value
 public class Client {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String name;
-    private String password;
+    Long id;
+    String name;
+    String password;
     @Enumerated(EnumType.STRING)
-    private Role role;
+    Role role;
 }

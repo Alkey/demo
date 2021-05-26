@@ -19,7 +19,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
-        Client client = clientRepository.findClientByName(name).orElseThrow(() -> new UsernameNotFoundException("Client not found"));
+        Client client = clientRepository.findByName(name).orElseThrow(() -> new UsernameNotFoundException("Client not found"));
         return new User(client.getName(), client.getPassword(), List.of(new SimpleGrantedAuthority(client.getRole().name())));
     }
 }

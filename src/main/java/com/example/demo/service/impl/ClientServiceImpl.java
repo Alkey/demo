@@ -3,15 +3,13 @@ package com.example.demo.service.impl;
 import com.example.demo.dto.ClientCreateDto;
 import com.example.demo.entity.Client;
 import com.example.demo.entity.Role;
-import com.example.demo.exception.ClientAlreadyExistsException;
-import com.example.demo.exception.PasswordMismatchException;
 import com.example.demo.repository.ClientRepository;
 import com.example.demo.service.ClientService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -21,22 +19,15 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public long add(ClientCreateDto dto) {
-        if (dto.getPassword() == null || !dto.getPassword().equals(dto.getRepeatPassword())) {
-            throw new PasswordMismatchException("Password mismatch");
+        if (Objects.equals(dto.getPassword(), dto.getRepeatPassword()) && clientRepository.findByName(dto.getName()).isEmpty()) {
+            Client client = new Client(null, dto.getName(), encoder.encode(dto.getPassword()), Role.USER);
+            return clientRepository.add(client);
         }
-        if (dto.getName() == null || clientRepository.findClientByName(dto.getName()).isPresent()) {
-            throw new ClientAlreadyExistsException("Client already exist");
-        }
-        Client client = new Client();
-        client.setName(dto.getName());
-        client.setRole(Role.USER);
-        client.setPassword(encoder.encode(dto.getPassword()));
-        return clientRepository.save(client).getId();
+        throw new IllegalArgumentException("Incorrect name or password");
     }
 
     @Override
-    @Transactional
-    public boolean setRole(Long clientId, Role role) {
-        return clientRepository.updateRole(role, clientId) > 0;
+    public boolean setRole(long clientId, Role role) {
+        return clientRepository.setRole(clientId, role) == 1;
     }
 }

@@ -7,5 +7,5 @@ public interface ClientService {
 
     long add(ClientCreateDto dto);
 
-    boolean setRole(Long clientId, Role role);
+    boolean setRole(long clientId, Role role);
 }

@@ -1,16 +1,14 @@
 package com.example.demo.entity;
 
-import lombok.Data;
+import lombok.Value;
 
-import javax.persistence.*;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
 
-@Entity
-@Data
-@Table(name = "products", schema = "public")
+@Value
 public class Product {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String name;
-    private double price;
+    Long id;
+    @Size(min = 1) String name;
+    @Positive
+    double price;
 }

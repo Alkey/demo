@@ -1,13 +1,13 @@
-package com.example.demo.repository;
+package com.example.demo.service;
 
 import com.example.demo.entity.Product;
 
 import java.util.List;
 
-public interface ProductRepository {
+public interface ProductService {
     long add(Product product);
 
     List<Product> getAll();
 
-    int delete(long id);
+    boolean delete(long id);
 }
