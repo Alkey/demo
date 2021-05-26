@@ -48,7 +48,7 @@ public class ClientServiceImplTest {
         when(encoder.encode(PASSWORD)).thenReturn(ENCODED_PASSWORD);
         when(clientRepository.add(client)).thenReturn(ID);
 
-        assertThat(ID, is(service.add(dto)));
+        assertThat(service.add(dto), is(ID));
 
         verify(clientRepository).findByName(CLIENT_NAME);
         verify(encoder).encode(PASSWORD);
