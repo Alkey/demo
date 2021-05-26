@@ -1,14 +1,13 @@
 package com.example.demo.service;
 
-import com.example.demo.dto.ProductCreateDto;
-import com.example.demo.dto.ProductDto;
+import com.example.demo.entity.Product;
 
 import java.util.List;
 
 public interface ProductService {
-    long add(ProductCreateDto dto);
+    long add(Product product);
 
-    List<ProductDto> getAll();
+    List<Product> getAll();
 
     boolean delete(long id);
 }

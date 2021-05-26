@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/clients")
@@ -14,8 +16,9 @@ public class ClientController {
     private final ClientService clientService;
 
     @PostMapping("/add")
-    public long create(@RequestBody ClientCreateDto dto) {
-        return clientService.add(dto);
+    public ResponseEntity<Long> create(@RequestBody
+                                       @Valid ClientCreateDto dto) {
+        return ResponseEntity.ok(clientService.add(dto));
     }
 
     @PutMapping("/set-role/{clientId}/{role}")

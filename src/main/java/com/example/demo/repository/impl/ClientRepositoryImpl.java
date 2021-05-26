@@ -2,7 +2,6 @@ package com.example.demo.repository.impl;
 
 import com.example.demo.entity.Client;
 import com.example.demo.entity.Role;
-import com.example.demo.exception.EntityCreateException;
 import com.example.demo.jooq.sample.model.tables.Clients;
 import com.example.demo.repository.ClientRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,24 +17,23 @@ public class ClientRepositoryImpl implements ClientRepository {
 
     @Override
     public long add(Client client) {
-        return dsl.insertInto(Clients.CLIENTS)
-                .set(dsl.newRecord(Clients.CLIENTS, client))
-                .returning(Clients.CLIENTS.ID)
-                .fetchOptional()
-                .orElseThrow(() -> new EntityCreateException("Can't save client"))
-                .getId();
+        return dsl.insertInto(Clients.CLIENTS, Clients.CLIENTS.NAME, Clients.CLIENTS.PASSWORD, Clients.CLIENTS.ROLE)
+                .values(client.getName(), client.getPassword(), client.getRole().name())
+                .returningResult(Clients.CLIENTS.ID)
+                .fetchOne()
+                .value1();
     }
 
     @Override
-    public boolean setRole(Long clientId, Role role) {
+    public int setRole(long clientId, Role role) {
         return dsl.update(Clients.CLIENTS)
                 .set(Clients.CLIENTS.ROLE, role.name())
                 .where(Clients.CLIENTS.ID.eq(clientId))
-                .execute() == 1;
+                .execute();
     }
 
     @Override
-    public Optional<Client> getByName(String name) {
+    public Optional<Client> findByName(String name) {
         return dsl.selectFrom(Clients.CLIENTS)
                 .where(Clients.CLIENTS.NAME.eq(name))
                 .fetchOptionalInto(Client.class);

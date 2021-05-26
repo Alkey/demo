@@ -21,7 +21,7 @@ public class ClientServiceImplTest {
     private static final String CLIENT_NAME = "User";
     private static final String PASSWORD = "123";
     private static final String ENCODED_PASSWORD = "encoded_password";
-    private static final Long ID = 1L;
+    private static final long ID = 1L;
     private final ClientRepository clientRepository = mock(ClientRepository.class);
     private final PasswordEncoder encoder = mock(PasswordEncoder.class);
     private final ClientServiceImpl service = new ClientServiceImpl(clientRepository, encoder);
@@ -45,7 +45,7 @@ public class ClientServiceImplTest {
                 .repeatPassword(PASSWORD)
                 .build();
 
-        when(clientRepository.getByName(CLIENT_NAME)).thenReturn(Optional.of(new Client()));
+        when(clientRepository.findByName(CLIENT_NAME)).thenReturn(Optional.of(new Client()));
 
         assertThrows(ClientAlreadyExistsException.class, () -> service.add(dto));
     }
@@ -68,13 +68,13 @@ public class ClientServiceImplTest {
         savedClient.setPassword(ENCODED_PASSWORD);
         savedClient.setRole(Role.USER);
 
-        when(clientRepository.getByName(CLIENT_NAME)).thenReturn(Optional.empty());
+        when(clientRepository.findByName(CLIENT_NAME)).thenReturn(Optional.empty());
         when(encoder.encode(PASSWORD)).thenReturn(ENCODED_PASSWORD);
         when(clientRepository.add(client)).thenReturn(ID);
 
         assertThat(ID, is(service.add(dto)));
 
-        verify(clientRepository).getByName(CLIENT_NAME);
+        verify(clientRepository).findByName(CLIENT_NAME);
         verify(encoder).encode(PASSWORD);
     }
 }

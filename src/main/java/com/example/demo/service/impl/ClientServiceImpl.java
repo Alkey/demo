@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -21,10 +21,10 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public long add(ClientCreateDto dto) {
-        if (dto.getPassword() == null || !dto.getPassword().equals(dto.getRepeatPassword())) {
+        if (!Objects.equals(dto.getPassword(), dto.getRepeatPassword())) {
             throw new PasswordMismatchException("Password mismatch");
         }
-        if (dto.getName() == null || clientRepository.getByName(dto.getName()).isPresent()) {
+        if (clientRepository.findByName(dto.getName()).isPresent()) {
             throw new ClientAlreadyExistsException("Client already exist");
         }
         Client client = new Client();
@@ -35,8 +35,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    @Transactional
-    public boolean setRole(Long clientId, Role role) {
-        return clientRepository.setRole(clientId, role);
+    public boolean setRole(long clientId, Role role) {
+        return clientRepository.setRole(clientId, role) == 1;
     }
 }

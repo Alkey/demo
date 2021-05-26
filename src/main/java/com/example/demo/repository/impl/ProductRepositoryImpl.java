@@ -32,9 +32,9 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    public boolean delete(Long id) {
+    public int delete(long id) {
         return dsl.deleteFrom(Products.PRODUCTS)
                 .where(Products.PRODUCTS.ID.eq(id))
-                .execute() == 1;
+                .execute();
     }
 }

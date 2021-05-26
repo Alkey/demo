@@ -9,5 +9,5 @@ public interface ProductRepository {
 
     List<Product> getAll();
 
-    boolean delete(Long id);
+    int delete(long id);
 }

@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface ClientRepository {
     long add(Client client);
 
-    boolean setRole(Long clientId, Role role);
+    int setRole(long clientId, Role role);
 
-    Optional<Client> getByName(String name);
+    Optional<Client> findByName(String name);
 }

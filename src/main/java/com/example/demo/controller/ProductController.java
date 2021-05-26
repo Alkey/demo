@@ -1,12 +1,12 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.ProductCreateDto;
-import com.example.demo.dto.ProductDto;
+import com.example.demo.entity.Product;
 import com.example.demo.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -15,14 +15,15 @@ import java.util.List;
 public class ProductController {
     private final ProductService productService;
 
-    @PostMapping("/add")
-    public long add(@RequestBody ProductCreateDto dto) {
-        return productService.add(dto);
+    @PostMapping
+    public ResponseEntity<Long> add(@RequestBody
+                                    @Valid Product product) {
+        return ResponseEntity.ok(productService.add(product));
     }
 
-    @GetMapping("/all")
-    public List<ProductDto> getAll() {
-        return productService.getAll();
+    @GetMapping
+    public ResponseEntity<List<Product>> getAll() {
+        return ResponseEntity.ok(productService.getAll());
     }
 
     @DeleteMapping("/{id}")
