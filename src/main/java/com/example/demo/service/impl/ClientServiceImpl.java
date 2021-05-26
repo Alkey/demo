@@ -24,19 +24,19 @@ public class ClientServiceImpl implements ClientService {
         if (dto.getPassword() == null || !dto.getPassword().equals(dto.getRepeatPassword())) {
             throw new PasswordMismatchException("Password mismatch");
         }
-        if (dto.getName() == null || clientRepository.findClientByName(dto.getName()).isPresent()) {
+        if (dto.getName() == null || clientRepository.getByName(dto.getName()).isPresent()) {
             throw new ClientAlreadyExistsException("Client already exist");
         }
         Client client = new Client();
         client.setName(dto.getName());
         client.setRole(Role.USER);
         client.setPassword(encoder.encode(dto.getPassword()));
-        return clientRepository.save(client).getId();
+        return clientRepository.add(client);
     }
 
     @Override
     @Transactional
     public boolean setRole(Long clientId, Role role) {
-        return clientRepository.updateRole(role, clientId) > 0;
+        return clientRepository.setRole(clientId, role);
     }
 }
