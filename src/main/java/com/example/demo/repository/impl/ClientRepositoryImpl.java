@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @Repository
@@ -17,11 +18,11 @@ public class ClientRepositoryImpl implements ClientRepository {
 
     @Override
     public long add(Client client) {
-        return dsl.insertInto(Clients.CLIENTS, Clients.CLIENTS.NAME, Clients.CLIENTS.PASSWORD, Clients.CLIENTS.ROLE)
+        return Objects.requireNonNull(dsl.insertInto(Clients.CLIENTS, Clients.CLIENTS.NAME, Clients.CLIENTS.PASSWORD, Clients.CLIENTS.ROLE)
                 .values(client.getName(), client.getPassword(), client.getRole().name())
                 .returningResult(Clients.CLIENTS.ID)
-                .fetchOne()
-                .value1();
+                .fetchOne())
+                .into(long.class);
     }
 
     @Override

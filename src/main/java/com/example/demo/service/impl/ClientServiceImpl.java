@@ -3,8 +3,6 @@ package com.example.demo.service.impl;
 import com.example.demo.dto.ClientCreateDto;
 import com.example.demo.entity.Client;
 import com.example.demo.entity.Role;
-import com.example.demo.exception.ClientAlreadyExistsException;
-import com.example.demo.exception.PasswordMismatchException;
 import com.example.demo.repository.ClientRepository;
 import com.example.demo.service.ClientService;
 import lombok.RequiredArgsConstructor;
@@ -21,17 +19,11 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public long add(ClientCreateDto dto) {
-        if (!Objects.equals(dto.getPassword(), dto.getRepeatPassword())) {
-            throw new PasswordMismatchException("Password mismatch");
+        if (Objects.equals(dto.getPassword(), dto.getRepeatPassword()) && clientRepository.findByName(dto.getName()).isEmpty()) {
+            Client client = new Client(null, dto.getName(), encoder.encode(dto.getPassword()), Role.USER);
+            return clientRepository.add(client);
         }
-        if (clientRepository.findByName(dto.getName()).isPresent()) {
-            throw new ClientAlreadyExistsException("Client already exist");
-        }
-        Client client = new Client();
-        client.setName(dto.getName());
-        client.setRole(Role.USER);
-        client.setPassword(encoder.encode(dto.getPassword()));
-        return clientRepository.add(client);
+        throw new IllegalArgumentException("Incorrect name or password");
     }
 
     @Override
