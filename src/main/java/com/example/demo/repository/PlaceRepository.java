@@ -2,9 +2,11 @@ package com.example.demo.repository;
 
 import com.example.demo.entity.Place;
 
+import java.util.Optional;
+
 public interface PlaceRepository {
 
-    double add(Place place);
+    int add(Place place);
 
-    Place get(long id);
+    Optional<Place> findById(long id);
 }

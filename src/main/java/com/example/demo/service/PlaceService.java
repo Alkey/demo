@@ -1,10 +1,11 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.PlaceDto;
+import com.example.demo.dto.PlaceWithLengthDto;
 
 public interface PlaceService {
 
-    double add(PlaceDto dto);
+    boolean add(PlaceDto dto);
 
-    PlaceDto get(long id);
+    PlaceWithLengthDto get(long id);
 }

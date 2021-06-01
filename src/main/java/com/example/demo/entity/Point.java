@@ -4,6 +4,6 @@ import lombok.Value;
 
 @Value
 public class Point {
-    double latitude;
-    double longitude;
+    double lat;
+    double lon;
 }

@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.PlaceDto;
+import com.example.demo.dto.PlaceWithLengthDto;
 import com.example.demo.service.PlaceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -13,12 +14,15 @@ public class PlaceController {
     private final PlaceService service;
 
     @PostMapping
-    public ResponseEntity<Double> add(@RequestBody PlaceDto dto) {
-        return ResponseEntity.ok(service.add(dto));
+    public ResponseEntity<String> add(@RequestBody PlaceDto dto) {
+        if (service.add(dto)) {
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.badRequest().build();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PlaceDto> get(@PathVariable long id) {
+    public ResponseEntity<PlaceWithLengthDto> get(@PathVariable long id) {
         return ResponseEntity.ok(service.get(id));
     }
 }

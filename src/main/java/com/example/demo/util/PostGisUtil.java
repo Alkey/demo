@@ -1,11 +1,26 @@
 package com.example.demo.util;
 
 import org.jooq.Field;
+import org.springframework.stereotype.Component;
 
-public interface PostGisUtil {
-    Field<?> stAsText(Field<?> location);
+import static org.jooq.impl.DSL.field;
 
-    Field<Double> stLength(String location);
+@Component
+public class PostGisUtil {
 
-    Field<String> stLineFromText(String location);
+    public static Field<String> stAsText(Field<String> geometry) {
+        return field("st_astext({0})", String.class, geometry);
+    }
+
+    public static Field<Double> stLength(String geometryString) {
+        return field("st_length({0}::geography)", double.class, geometryString);
+    }
+
+    public static Field<String> stLineFromText(String geometryString) {
+        return field("st_linefromtext({0})", String.class, geometryString);
+    }
+
+    public static Field<String> stAsGeoJson(Field<String> geometry) {
+        return field("st_asgeojson({0}) :: json-> 'coordinates'", String.class, geometry);
+    }
 }

@@ -8,13 +8,12 @@ public class PlaceDto {
     String name;
     Point startPoint;
     Point endPoint;
-    double length;
 
     @Override
     public String toString() {
-        return "LINESTRING(" + startPoint.getLatitude() + " "
-                + startPoint.getLongitude() + ", "
-                + endPoint.getLatitude() + " "
-                + endPoint.getLongitude() + ")";
+        return "LINESTRING(" + startPoint.getLat() + " "
+                + startPoint.getLon() + ", "
+                + endPoint.getLat() + " "
+                + endPoint.getLon() + ")";
     }
 }

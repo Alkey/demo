@@ -100,7 +100,7 @@
                                     <name>
                                         org.jooq.meta.postgres.PostgresDatabase
                                     </name>
-                                    <includes>clients|products|places|points</includes>
+                                    <includes>clients|products|places</includes>
                                     <inputSchema>public</inputSchema>
                                 </database>
                                 <generate>
