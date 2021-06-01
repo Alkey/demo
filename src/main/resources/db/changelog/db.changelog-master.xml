@@ -32,4 +32,20 @@
             </column>
         </createTable>
     </changeSet>
+    <changeSet id="3" author="Ivan">
+        <createTable tableName="places">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(250)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="location" type="varchar(500)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="length" type="double">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
 </databaseChangeLog>
