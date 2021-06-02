@@ -28,21 +28,19 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     @Override
-    public Optional<PlaceWithLengthDto> findById(long id) {
+    public Optional<PlaceWithLengthDto> findById(long id) throws JsonProcessingException {
         Optional<Place> optionalPlace = placeRepository.findById(id);
         if (optionalPlace.isEmpty()) {
             return Optional.empty();
         }
         Place place = optionalPlace.get();
-        List<List<Double>> coordinates;
-        try {
-            coordinates = mapper.readValue(place.getLocation(), new TypeReference<>() {});
-        } catch (JsonProcessingException e) {
-            throw new IllegalArgumentException("Incorrect coordinates");
-        }
-        List<Point> points = coordinates.stream()
-                .map(c -> new Point(c.get(0), c.get(1)))
-                .collect(Collectors.toList());
+        List<Point> points = getPoints(place.getLocation());
         return Optional.of(new PlaceWithLengthDto(place.getName(), points.get(0), points.get(1), place.getLength()));
+    }
+
+    private List<Point> getPoints(String line) throws JsonProcessingException {
+        return mapper.readValue(line, new TypeReference<List<List<Double>>>() {}).stream()
+                .map(c -> new Point(c.get(0), c.get(1)))
+                .collect(Collectors.toUnmodifiableList());
     }
 }
