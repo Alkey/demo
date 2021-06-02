@@ -20,7 +20,7 @@ public class PostGisUtil {
         return field("st_linefromtext({0})", String.class, geometryString);
     }
 
-    public static Field<String> stAsGeoJson(Field<String> geometry) {
+    public static Field<String> convertToGeoJsonAndCoordinates(Field<String> geometry) {
         return field("st_asgeojson({0}) :: json-> 'coordinates'", String.class, geometry);
     }
 }

@@ -1,12 +1,12 @@
 package com.example.demo.repository;
 
-import com.example.demo.entity.Place;
+import com.example.demo.entity.Line;
 
 import java.util.Optional;
 
-public interface PlaceRepository {
+public interface LineRepository {
 
     int add(String name, String location);
 
-    Optional<Place> findById(long id);
+    Optional<Line> findById(long id);
 }
