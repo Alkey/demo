@@ -30,15 +30,14 @@ public class LineServiceImpl implements LineService {
     @Override
     public Optional<LineWithLengthDto> findById(long id) throws JsonProcessingException {
         Optional<Line> optionalPlace = placeRepository.findById(id);
-        if (optionalPlace.isEmpty()) {
-            return Optional.empty();
+        if (optionalPlace.isPresent()) {
+            Line place = optionalPlace.get();
+            List<Point> points = getPoints(place.getLocation());
+            if (points.size() == 2) {
+                return Optional.of(new LineWithLengthDto(place.getName(), points.get(0), points.get(1), place.getLength()));
+            }
         }
-        Line place = optionalPlace.get();
-        List<Point> points = getPoints(place.getLocation());
-        if (points.size() != 2) {
-            return Optional.empty();
-        }
-        return Optional.of(new LineWithLengthDto(place.getName(), points.get(0), points.get(1), place.getLength()));
+        return Optional.empty();
     }
 
     private List<Point> getPoints(String line) throws JsonProcessingException {
