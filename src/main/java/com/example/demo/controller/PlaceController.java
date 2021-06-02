@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/place")
@@ -23,7 +25,10 @@ public class PlaceController {
 
     @GetMapping("/{id}")
     public ResponseEntity<PlaceWithLengthDto> get(@PathVariable long id) {
-        return ResponseEntity.ok(service.get(id));
+        Optional<PlaceWithLengthDto> place = service.findById(id);
+        if (place.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(place.get());
     }
 }
-

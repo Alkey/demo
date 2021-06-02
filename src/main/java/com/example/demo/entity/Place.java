@@ -1,11 +1,11 @@
 package com.example.demo.entity;
 
-import lombok.Data;
+import lombok.Value;
 
-@Data
+@Value
 public class Place {
-    private Long id;
-    private String name;
-    private String location;
-    private double length;
+    Long id;
+    String name;
+    String location;
+    double length;
 }

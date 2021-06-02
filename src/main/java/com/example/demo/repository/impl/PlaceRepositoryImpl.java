@@ -18,11 +18,11 @@ public class PlaceRepositoryImpl implements PlaceRepository {
     private final DSLContext dsl;
 
     @Override
-    public int add(Place place) {
+    public int add(String name, String location) {
         return dsl.insertInto(Places.PLACES)
-                .set(Places.PLACES.NAME, place.getName())
-                .set(field("location", String.class), PostGisUtil.stLineFromText(place.getLocation()))
-                .set(field("length", double.class), PostGisUtil.stLength(place.getLocation()))
+                .set(Places.PLACES.NAME, name)
+                .set(field("location", String.class), PostGisUtil.stLineFromText(location))
+                .set(field("length", double.class), PostGisUtil.stLength(location))
                 .execute();
     }
 

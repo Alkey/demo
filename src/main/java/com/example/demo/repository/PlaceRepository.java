@@ -6,7 +6,7 @@ import java.util.Optional;
 
 public interface PlaceRepository {
 
-    int add(Place place);
+    int add(String name, String location);
 
     Optional<Place> findById(long id);
 }
