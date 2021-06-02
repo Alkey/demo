@@ -91,7 +91,7 @@
                         <configuration>
                             <jdbc>
                                 <driver>org.postgresql.Driver</driver>
-                                <url>jdbc:postgresql://localhost:5433/postgres</url>
+                                <url>jdbc:postgresql://localhost:5432/postgres</url>
                                 <user>postgres</user>
                                 <password>root</password>
                             </jdbc>
@@ -100,7 +100,7 @@
                                     <name>
                                         org.jooq.meta.postgres.PostgresDatabase
                                     </name>
-                                    <includes>.*</includes>
+                                    <includes>client|product|line</includes>
                                     <inputSchema>public</inputSchema>
                                 </database>
                                 <generate>
