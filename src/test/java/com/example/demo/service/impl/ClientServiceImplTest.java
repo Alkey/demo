@@ -26,22 +26,14 @@ public class ClientServiceImplTest {
 
     @Test
     public void shouldThrowIllegalArgumentExceptionWhenTryAddClient() {
-        ClientCreateDto dto = ClientCreateDto.builder()
-                .name(CLIENT_NAME)
-                .password(PASSWORD)
-                .repeatPassword("1234")
-                .build();
+        ClientCreateDto dto = new ClientCreateDto(CLIENT_NAME, PASSWORD, "1234");
 
         assertThrows(IllegalArgumentException.class, () -> service.add(dto));
     }
 
     @Test
     public void shouldAddClientWhenDtoCorrect() {
-        ClientCreateDto dto = ClientCreateDto.builder()
-                .name(CLIENT_NAME)
-                .password(PASSWORD)
-                .repeatPassword(PASSWORD)
-                .build();
+        ClientCreateDto dto = new ClientCreateDto(CLIENT_NAME, PASSWORD, PASSWORD);
         Client client = new Client(null, CLIENT_NAME, ENCODED_PASSWORD, Role.USER);
 
         when(clientRepository.findByName(CLIENT_NAME)).thenReturn(Optional.empty());

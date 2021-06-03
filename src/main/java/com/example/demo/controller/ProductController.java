@@ -28,10 +28,6 @@ public class ProductController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable long id) {
-        if (productService.delete(id)) {
-            return ResponseEntity.ok().build();
-
-        }
-        return ResponseEntity.badRequest().build();
+        return productService.delete(id) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
     }
 }
