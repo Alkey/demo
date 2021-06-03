@@ -24,9 +24,6 @@ public class ClientController {
     @PutMapping("/set-role/{clientId}/{role}")
     public ResponseEntity<String> setRole(@PathVariable Long clientId,
                                           @PathVariable Role role) {
-        if (clientService.setRole(clientId, role)) {
-            return ResponseEntity.ok().build();
-        }
-        return ResponseEntity.badRequest().build();
+        return clientService.setRole(clientId, role) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
     }
 }

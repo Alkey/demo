@@ -1,14 +1,15 @@
 package com.example.demo.entity;
 
-import lombok.Value;
+import lombok.Data;
 
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 
-@Value
+@Data
 public class Product {
-    Long id;
-    @Size(min = 1) String name;
+    private Long id;
+    @Size(min = 1)
+    private String name;
     @Positive
-    double price;
+    private double price;
 }

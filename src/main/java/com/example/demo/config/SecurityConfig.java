@@ -40,7 +40,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/clients/set-role/**").hasRole(Role.ADMIN.name())
                 .antMatchers(HttpMethod.DELETE, "/products/*").hasRole(Role.ADMIN.name())
                 .antMatchers(HttpMethod.POST, "/products").hasRole(Role.ADMIN.name())
-                .antMatchers(HttpMethod.GET, "/products").permitAll();
+                .antMatchers(HttpMethod.GET, "/products").permitAll()
+                .antMatchers("/v2/api-docs",
+                        "/configuration/ui",
+                        "/swagger-resources/**",
+                        "/configuration/security",
+                        "/swagger-ui.html",
+                        "/webjars/**").hasRole(Role.ADMIN.name());
     }
 
     @Override
