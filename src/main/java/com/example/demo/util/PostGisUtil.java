@@ -23,4 +23,12 @@ public class PostGisUtil {
     public static Field<String> convertToGeoJsonAndCoordinates(Field<String> geometry) {
         return field("st_asgeojson({0}) :: json-> 'coordinates'", String.class, geometry);
     }
+
+    public static Field<String> stPolygonFromText(String geometryString) {
+        return field("st_polygonfromtext({0})", String.class, geometryString);
+    }
+
+    public static Field<Double> stArea(String geometryString) {
+        return field("st_area({0}::geography)", double.class, geometryString);
+    }
 }

@@ -48,4 +48,20 @@
             </column>
         </createTable>
     </changeSet>
+    <changeSet id="4" author="Ivan">
+        <createTable tableName="polygon">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(250)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="location" type="varchar(500)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="area" type="double">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
 </databaseChangeLog>
