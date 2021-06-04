@@ -8,6 +8,8 @@ import lombok.Value;
 
 import javax.validation.constraints.Size;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Value
 public class PolygonDto {
@@ -27,16 +29,35 @@ public class PolygonDto {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder("POLYGON((");
-        points.forEach(p -> builder.append(p.getLat())
-                .append(" ")
-                .append(p.getLon())
-                .append(", "));
-        builder.replace(builder.length() - 2, builder.length(), "")
-                .append(")");
-        holes.forEach(h -> builder.append(h.toString())
-                .append(","));
-        return builder.deleteCharAt(builder.length() - 1)
-                .append(")").toString();
+        if (holes != null && holes.size() > 0) {
+            return Stream.builder()
+                    .add("POLYGON((")
+                    .add(points.stream()
+                            .limit(points.size() - 1)
+                            .map(p -> p.toString() + ", ")
+                            .collect(Collectors.joining()))
+                    .add(points.get(points.size() - 1).toString())
+                    .add("),")
+                    .add(holes.stream()
+                            .limit(holes.size() - 1)
+                            .map(h -> h.toString() + ",")
+                            .collect(Collectors.joining()))
+                    .add(holes.get(holes.size() - 1).toString())
+                    .add(")")
+                    .build()
+                    .map(p -> (String) p)
+                    .collect(Collectors.joining());
+        }
+        return Stream.builder()
+                .add("POLYGON((")
+                .add(points.stream()
+                        .limit(points.size() - 1)
+                        .map(p -> p.toString() + ", ")
+                        .collect(Collectors.joining()))
+                .add(points.get(points.size() - 1).toString())
+                .add("))")
+                .build()
+                .map(p -> (String) p)
+                .collect(Collectors.joining());
     }
 }

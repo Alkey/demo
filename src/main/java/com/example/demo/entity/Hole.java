@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Value;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Value
 public class Hole {
@@ -17,13 +19,19 @@ public class Hole {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder(",(");
-        points.forEach(p -> builder.append(p.getLat())
-                .append(" ")
-                .append(p.getLon())
-                .append(", "));
-        return builder.replace(builder.length() - 2, builder.length(), "")
-                .append(")")
-                .toString();
+        if (points == null || points.isEmpty()) {
+            return "";
+        }
+        return Stream.builder()
+                .add("(")
+                .add(points.stream()
+                        .limit(points.size() - 1)
+                        .map(p -> p.toString() + ", ")
+                        .collect(Collectors.joining()))
+                .add(points.get(points.size() - 1).toString())
+                .add(")")
+                .build()
+                .map(p -> (String) p)
+                .collect(Collectors.joining());
     }
 }
