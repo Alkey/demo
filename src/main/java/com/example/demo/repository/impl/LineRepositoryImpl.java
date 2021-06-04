@@ -21,14 +21,14 @@ public class LineRepositoryImpl implements LineRepository {
     public int add(String name, String location) {
         return dsl.insertInto(LINE)
                 .set(LINE.NAME, name)
-                .set(field("location", String.class), PostGisUtil.stLineFromText(location))
+                .set(field("geometry", String.class), PostGisUtil.stGeomFromText(location))
                 .set(field("length", double.class), PostGisUtil.stLength(location))
                 .execute();
     }
 
     @Override
     public Optional<Line> findById(long id) {
-        return dsl.select(LINE.ID, LINE.NAME, PostGisUtil.convertToGeoJsonAndCoordinates(LINE.LOCATION).as("location"), LINE.LENGTH)
+        return dsl.select(LINE.ID, LINE.NAME, PostGisUtil.convertToGeoJsonAndCoordinates(LINE.GEOMETRY).as("geometry"), LINE.LENGTH)
                 .from(LINE)
                 .where(LINE.ID.eq(id))
                 .fetchOptionalInto(Line.class);

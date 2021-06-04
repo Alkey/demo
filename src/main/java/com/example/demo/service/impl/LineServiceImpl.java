@@ -32,7 +32,7 @@ public class LineServiceImpl implements LineService {
         Optional<Line> optionalPlace = placeRepository.findById(id);
         if (optionalPlace.isPresent()) {
             Line place = optionalPlace.get();
-            List<Point> points = getPoints(place.getLocation());
+            List<Point> points = getPoints(place.getGeometry());
             if (points.size() == 2) {
                 return Optional.of(new LineWithLengthDto(place.getName(), points.get(0), points.get(1), place.getLength()));
             }

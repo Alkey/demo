@@ -20,14 +20,14 @@ public class PolygonRepositoryImpl implements PolygonRepository {
     public int add(String name, String polygon) {
         return dsl.insertInto(POLYGON)
                 .set(POLYGON.NAME, name)
-                .set(POLYGON.LOCATION, PostGisUtil.stPolygonFromText(polygon))
+                .set(POLYGON.GEOMETRY, PostGisUtil.stGeomFromText(polygon))
                 .set(POLYGON.AREA, PostGisUtil.stArea(polygon))
                 .execute();
     }
 
     @Override
     public Optional<Polygon> findById(long id) {
-        return dsl.select(POLYGON.NAME, PostGisUtil.convertToGeoJsonAndCoordinates(POLYGON.LOCATION).as("polygon"), POLYGON.AREA)
+        return dsl.select(POLYGON.ID, POLYGON.NAME, PostGisUtil.convertToGeoJsonAndCoordinates(POLYGON.GEOMETRY).as("geometry"), POLYGON.AREA)
                 .from(POLYGON)
                 .where(POLYGON.ID.eq(id))
                 .fetchOptionalInto(Polygon.class);

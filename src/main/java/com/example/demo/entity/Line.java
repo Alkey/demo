@@ -6,6 +6,6 @@ import lombok.Value;
 public class Line {
     Long id;
     String name;
-    String location;
+    String geometry;
     double length;
 }

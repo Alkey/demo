@@ -6,6 +6,6 @@ import lombok.Value;
 public class Polygon {
     long id;
     String name;
-    String location;
+    String geometry;
     double area;
 }
