@@ -32,13 +32,16 @@ public class PolygonServiceImpl implements PolygonService {
         Optional<Polygon> optionalPolygon = repository.findById(id);
         if (optionalPolygon.isPresent()) {
             Polygon polygon = optionalPolygon.get();
-            List<List<List<Double>>> polygonPoints = mapper.readValue(polygon.getGeometry(), new TypeReference<>() {});
-            List<List<Point>> points = polygonPoints.stream()
-                    .map(this::getPoints)
-                    .collect(Collectors.toUnmodifiableList());
-            return Optional.of(new PolygonWithAreaDto(polygon.getName(), points, polygon.getArea()));
+            return Optional.of(new PolygonWithAreaDto(polygon.getName(), getPolygonPoints(polygon.getGeometry()), polygon.getArea()));
         }
         return Optional.empty();
+    }
+
+    private List<List<Point>> getPolygonPoints(String geometry) throws JsonProcessingException {
+        List<List<List<Double>>> polygonPoints = mapper.readValue(geometry, new TypeReference<>() {});
+        return polygonPoints.stream()
+                .map(this::getPoints)
+                .collect(Collectors.toUnmodifiableList());
     }
 
     private List<Point> getPoints(List<List<Double>> points) {

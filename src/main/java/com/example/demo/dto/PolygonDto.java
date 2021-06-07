@@ -7,6 +7,7 @@ import lombok.Value;
 
 import javax.validation.constraints.Size;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Value
 public class PolygonDto {
@@ -23,16 +24,14 @@ public class PolygonDto {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder("POLYGON(");
-        points.forEach(pointsList -> getRing(builder, pointsList));
-        return builder.replace(builder.length() - 1, builder.length(), ")").toString();
+        return points.stream()
+                .map(this::getRing)
+                .collect(Collectors.joining(",", "POLYGON(", ")"));
     }
 
-    private void getRing(StringBuilder builder, List<Point> points) {
-        builder.append("(");
-        points.forEach(point -> builder.append(point.toString())
-                .append(", "));
-        builder.replace(builder.length() - 2, builder.length(), "")
-                .append("),");
+    private String getRing(List<Point> points) {
+        return points.stream()
+                .map(Point::toString)
+                .collect(Collectors.joining(", ", "(", ")"));
     }
 }
