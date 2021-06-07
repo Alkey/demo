@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/polygon")
@@ -15,7 +17,8 @@ public class PolygonController {
     private final PolygonService service;
 
     @PostMapping
-    public ResponseEntity<Void> add(@RequestBody PolygonDto dto) {
+    public ResponseEntity<Void> add(@RequestBody
+                                    @Valid PolygonDto dto) {
         return service.add(dto) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
     }
 

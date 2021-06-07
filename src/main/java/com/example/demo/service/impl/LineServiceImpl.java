@@ -42,7 +42,7 @@ public class LineServiceImpl implements LineService {
 
     private List<Point> getPoints(String line) throws JsonProcessingException {
         return mapper.readValue(line, new TypeReference<List<List<Double>>>() {}).stream()
-                .filter(coordinates -> coordinates.size() == 2)
+                .filter(coordinates -> coordinates.size() >= 2)
                 .map(coordinates -> new Point(coordinates.get(0), coordinates.get(1)))
                 .collect(Collectors.toUnmodifiableList());
     }
