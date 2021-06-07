@@ -16,4 +16,9 @@ public class Point {
         this.lat = lat;
         this.lon = lon;
     }
+
+    @Override
+    public String toString() {
+        return lat + " " + lon;
+    }
 }

@@ -22,9 +22,7 @@ public class LineDto {
 
     @Override
     public String toString() {
-        return "LINESTRING(" + startPoint.getLat() + " "
-                + startPoint.getLon() + ", "
-                + endPoint.getLat() + " "
-                + endPoint.getLon() + ")";
+        return "LINESTRING(" + startPoint.toString() + ", "
+                + endPoint.toString() + ")";
     }
 }

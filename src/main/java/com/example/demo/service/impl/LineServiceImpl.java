@@ -32,7 +32,7 @@ public class LineServiceImpl implements LineService {
         Optional<Line> optionalPlace = placeRepository.findById(id);
         if (optionalPlace.isPresent()) {
             Line place = optionalPlace.get();
-            List<Point> points = getPoints(place.getLocation());
+            List<Point> points = getPoints(place.getGeometry());
             if (points.size() == 2) {
                 return Optional.of(new LineWithLengthDto(place.getName(), points.get(0), points.get(1), place.getLength()));
             }
@@ -42,7 +42,7 @@ public class LineServiceImpl implements LineService {
 
     private List<Point> getPoints(String line) throws JsonProcessingException {
         return mapper.readValue(line, new TypeReference<List<List<Double>>>() {}).stream()
-                .filter(coordinates -> coordinates.size() == 2)
+                .filter(coordinates -> coordinates.size() >= 2)
                 .map(coordinates -> new Point(coordinates.get(0), coordinates.get(1)))
                 .collect(Collectors.toUnmodifiableList());
     }
