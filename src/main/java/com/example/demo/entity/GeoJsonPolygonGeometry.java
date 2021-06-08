@@ -3,7 +3,6 @@ package com.example.demo.entity;
 import com.example.demo.dto.PolygonDto;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.Value;
 
 import javax.validation.constraints.NotNull;
@@ -12,20 +11,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Value
-@JsonTypeName("Polygon")
-public class PolygonGeometry implements GeoJsonGeometry {
+public class GeoJsonPolygonGeometry implements GeoJsonGeometry {
+    String type = "Polygon";
     @Size(min = 1)
     @NotNull
     List<@Size(min = 4) @NotNull List<@Size(min = 2) @NotNull List<@NotNull Double>>> coordinates;
 
     @JsonCreator
-    public PolygonGeometry(@JsonProperty("coordinates") List<List<List<Double>>> coordinates) {
+    public GeoJsonPolygonGeometry(@JsonProperty("coordinates") List<List<List<Double>>> coordinates) {
         this.coordinates = coordinates;
-    }
-
-    @Override
-    public String getType() {
-        return "Polygon";
     }
 
     public PolygonDto toEntity() {

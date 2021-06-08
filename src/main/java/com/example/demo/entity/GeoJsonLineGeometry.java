@@ -3,7 +3,6 @@ package com.example.demo.entity;
 import com.example.demo.dto.LineDto;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.Value;
 
 import javax.validation.constraints.NotNull;
@@ -12,20 +11,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Value
-@JsonTypeName("LineString")
-public class LineGeometry implements GeoJsonGeometry {
+public class GeoJsonLineGeometry implements GeoJsonGeometry {
+    String type = "LineString";
     @Size(min = 2)
     @NotNull
     List<@Size(min = 2) @NotNull List<@NotNull Double>> coordinates;
 
     @JsonCreator
-    public LineGeometry(@JsonProperty("coordinates") List<List<Double>> coordinates) {
+    public GeoJsonLineGeometry(@JsonProperty("coordinates") List<List<Double>> coordinates) {
         this.coordinates = coordinates;
-    }
-
-    @Override
-    public String getType() {
-        return "LineString";
     }
 
     public LineDto toEntity() {
@@ -35,7 +29,7 @@ public class LineGeometry implements GeoJsonGeometry {
 
     private List<Point> getPoints() {
         return coordinates.stream()
-                .map(c -> new Point(c.get(0), c.get(1)))
+                .map(coordinates -> new Point(coordinates.get(0), coordinates.get(1)))
                 .collect(Collectors.toUnmodifiableList());
     }
 }
