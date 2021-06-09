@@ -27,4 +27,24 @@ public class PostGisUtil {
     public static Field<Double> stArea(String geometryString) {
         return field("st_area({0}::geography)", double.class, geometryString);
     }
+
+    public static Field<String> stIntersects(Field<String> line, Field<String> polygon) {
+        return field("st_intersects({0}, {1})", String.class, line, polygon);
+    }
+
+    public static Field<String> stWithIn(Field<String> line, Field<String> polygon) {
+        return field("st_within({0}::geometry, {1}::geometry)", String.class, line, polygon);
+    }
+
+    public static Field<String> stDistance(Field<String> line, Field<String> polygon) {
+        return field("st_distance({0}::geography, {1}::geography)", String.class, line, polygon);
+    }
+
+    public static Field<String> stIntersection(Field<String> firstPolygon, Field<String> secondPolygon) {
+        return field("st_intersection({0}, {1})", String.class, firstPolygon, secondPolygon);
+    }
+
+    public static Field<String> convertToGeoJson(Field<String> geometry) {
+        return field("st_asgeojson({0}) :: json", String.class, geometry);
+    }
 }
