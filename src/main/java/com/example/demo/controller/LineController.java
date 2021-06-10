@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.LineDto;
 import com.example.demo.dto.LineWithLengthDto;
+import com.example.demo.entity.Point;
 import com.example.demo.service.LineService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,17 @@ public class LineController {
                     .map(ResponseEntity::ok)
                     .orElse(ResponseEntity.badRequest().build());
         } catch (JsonProcessingException e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @GetMapping("/intersection")
+    public ResponseEntity<Point> getLineStringIntersection(@RequestParam long firstId, @RequestParam long secondId) {
+        try {
+            return service.getLineStringIntersection(firstId, secondId)
+                    .map(ResponseEntity::ok)
+                    .orElse(ResponseEntity.badRequest().build());
+        } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
     }

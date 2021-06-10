@@ -19,9 +19,6 @@ public class GeoJsonController {
 
     @PostMapping
     public ResponseEntity<Void> save(@RequestBody @Valid GeoJsonGeometry geometry) {
-        if (service.add(geometry)) {
-            return ResponseEntity.ok().build();
-        }
-        return ResponseEntity.badRequest().build();
+        return service.add(geometry) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
     }
 }

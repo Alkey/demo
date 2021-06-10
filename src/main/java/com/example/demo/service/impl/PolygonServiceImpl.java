@@ -2,6 +2,7 @@ package com.example.demo.service.impl;
 
 import com.example.demo.dto.PolygonDto;
 import com.example.demo.dto.PolygonWithAreaDto;
+import com.example.demo.entity.GeoJsonGeometry;
 import com.example.demo.entity.Point;
 import com.example.demo.entity.Polygon;
 import com.example.demo.repository.PolygonRepository;
@@ -35,6 +36,11 @@ public class PolygonServiceImpl implements PolygonService {
             return Optional.of(new PolygonWithAreaDto(polygon.getName(), getPolygonPoints(polygon.getGeometry()), polygon.getArea()));
         }
         return Optional.empty();
+    }
+
+    @Override
+    public GeoJsonGeometry getPolygonIntersection(long firstPolygonId, long secondPolygonId) throws JsonProcessingException {
+        return mapper.readValue(repository.getPolygonIntersection(firstPolygonId, secondPolygonId), GeoJsonGeometry.class);
     }
 
     private List<List<Point>> getPolygonPoints(String geometry) throws JsonProcessingException {

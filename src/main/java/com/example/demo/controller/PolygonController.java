@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.PolygonDto;
 import com.example.demo.dto.PolygonWithAreaDto;
+import com.example.demo.entity.GeoJsonGeometry;
 import com.example.demo.service.PolygonService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,15 @@ public class PolygonController {
                     .map(ResponseEntity::ok)
                     .orElse(ResponseEntity.badRequest().build());
         } catch (JsonProcessingException e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @GetMapping("/intersection")
+    public ResponseEntity<GeoJsonGeometry> getPolygonIntersection(@RequestParam long firstId, @RequestParam long secondId) {
+        try {
+            return ResponseEntity.ok(service.getPolygonIntersection(firstId, secondId));
+        } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
     }

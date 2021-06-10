@@ -19,23 +19,36 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class LineServiceImpl implements LineService {
-    private final LineRepository placeRepository;
+    private final LineRepository repository;
     private final ObjectMapper mapper;
 
     @Override
     public boolean add(LineDto dto) {
-        return placeRepository.add(dto.getName(), dto.toString()) > 0;
+        return repository.add(dto.getName(), dto.toString()) > 0;
     }
 
     @Override
     public Optional<LineWithLengthDto> findById(long id) throws JsonProcessingException {
-        Optional<Line> optionalPlace = placeRepository.findById(id);
+        Optional<Line> optionalPlace = repository.findById(id);
         if (optionalPlace.isPresent()) {
             Line place = optionalPlace.get();
             List<Point> points = getPoints(place.getGeometry());
             if (points.size() == 2) {
                 return Optional.of(new LineWithLengthDto(place.getName(), points.get(0), points.get(1), place.getLength()));
             }
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<Point> getLineStringIntersection(long firstLineId, long secondLineId) throws JsonProcessingException {
+        return getPoint(repository.getLineStringIntersection(firstLineId, secondLineId));
+    }
+
+    private Optional<Point> getPoint(String geometry) throws JsonProcessingException {
+        List<Double> coordinates = mapper.readValue(geometry, new TypeReference<>() {});
+        if (coordinates.size() >= 2) {
+            return Optional.of(new Point(coordinates.get(0), coordinates.get(1)));
         }
         return Optional.empty();
     }
