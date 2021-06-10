@@ -9,4 +9,6 @@ public interface PolygonRepository {
     int add(String name, String polygon);
 
     Optional<Polygon> findById(long id);
+
+    String getPolygonIntersection(long firstPolygonId, long secondPolygonId);
 }

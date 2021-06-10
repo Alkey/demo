@@ -1,8 +1,6 @@
 package com.example.demo.repository.impl;
 
-import com.example.demo.jooq.sample.model.tables.Line;
-import com.example.demo.jooq.sample.model.tables.Polygon;
-import com.example.demo.repository.GeoJsonGeometryRepository;
+import com.example.demo.repository.SpatialRelationshipsRepository;
 import com.example.demo.util.PostGisUtil;
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
@@ -15,7 +13,7 @@ import static com.example.demo.jooq.sample.model.tables.Polygon.POLYGON;
 
 @Repository
 @RequiredArgsConstructor
-public class GeoJsonGeometryRepositoryImpl implements GeoJsonGeometryRepository {
+public class SpatialRelationshipsRepositoryImpl implements SpatialRelationshipsRepository {
     private final DSLContext dsl;
 
     @Override
@@ -40,25 +38,5 @@ public class GeoJsonGeometryRepositoryImpl implements GeoJsonGeometryRepository 
                 .from(LINE, POLYGON)
                 .where(LINE.ID.eq(lineId), POLYGON.ID.eq(polygonId))
                 .fetchOptionalInto(double.class);
-    }
-
-    @Override
-    public String getPolygonIntersection(long firstPolygonId, long secondPolygonId) {
-        Polygon firstPolygon = POLYGON.as("firstPolygon");
-        Polygon secondPolygon = POLYGON.as("secondPolygon");
-        return dsl.select(PostGisUtil.convertToGeoJson(PostGisUtil.stIntersection(firstPolygon.GEOMETRY, secondPolygon.GEOMETRY)))
-                .from(firstPolygon, secondPolygon)
-                .where(firstPolygon.ID.eq(firstPolygonId), secondPolygon.ID.eq(secondPolygonId))
-                .fetchOneInto(String.class);
-    }
-
-    @Override
-    public String getLineStringIntersection(long firstLineId, long secondLineId) {
-        Line firstLine = LINE.as("firstLine");
-        Line secondLine = LINE.as("secondLine");
-        return dsl.select(PostGisUtil.convertToGeoJsonAndCoordinates(PostGisUtil.stIntersection(firstLine.GEOMETRY, secondLine.GEOMETRY)))
-                .from(firstLine, secondLine)
-                .where(firstLine.ID.eq(firstLineId), secondLine.ID.eq(secondLineId))
-                .fetchOneInto(String.class);
     }
 }

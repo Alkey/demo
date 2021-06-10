@@ -40,8 +40,8 @@ public class PostGisUtil {
         return field("st_distance({0}::geography, {1}::geography)", String.class, line, polygon);
     }
 
-    public static Field<String> stIntersection(Field<String> firstPolygon, Field<String> secondPolygon) {
-        return field("st_intersection({0}, {1})", String.class, firstPolygon, secondPolygon);
+    public static Field<String> stIntersection(Field<String> firstGeometry, Field<String> secondGeometry) {
+        return field("st_intersection({0}, {1})", String.class, firstGeometry, secondGeometry);
     }
 
     public static Field<String> convertToGeoJson(Field<String> geometry) {
