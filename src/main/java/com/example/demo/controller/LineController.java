@@ -5,6 +5,8 @@ import com.example.demo.dto.LineWithLengthDto;
 import com.example.demo.entity.Point;
 import com.example.demo.service.LineService;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import io.micrometer.core.annotation.Timed;
+import io.micrometer.core.instrument.MeterRegistry;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

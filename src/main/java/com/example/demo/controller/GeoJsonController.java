@@ -2,6 +2,8 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.GeoJsonGeometry;
 import com.example.demo.service.GeoJsonGeometryService;
+import io.micrometer.core.annotation.Timed;
+import io.micrometer.core.instrument.MeterRegistry;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,9 +18,15 @@ import javax.validation.Valid;
 @RequestMapping("/geojson")
 public class GeoJsonController {
     private final GeoJsonGeometryService service;
+    private final MeterRegistry registry;
 
+    @Timed(value = "geometry_save_time")
     @PostMapping
     public ResponseEntity<Void> save(@RequestBody @Valid GeoJsonGeometry geometry) {
-        return service.add(geometry) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
+        if (service.add(geometry)) {
+            registry.counter("geometry_count").increment();
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.badRequest().build();
     }
 }
