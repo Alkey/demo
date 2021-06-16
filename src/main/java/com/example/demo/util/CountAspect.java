@@ -13,8 +13,8 @@ public class CountAspect {
     private final MeterRegistry registry;
 
     @AfterReturning(pointcut = "@annotation(count)", returning = "result")
-    public void count(Count count, Object result) {
-        if (result instanceof Boolean && (boolean) result) {
+    public void count(Count count, boolean result) {
+        if (result) {
             registry.counter(count.counterName()).increment();
         }
     }
