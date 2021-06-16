@@ -10,6 +10,7 @@ import com.example.demo.service.PolygonService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class PolygonServiceImpl implements PolygonService {
+    private static final String TIMER_NAME = "polygon_intersection_time";
     private final PolygonRepository repository;
     private final ObjectMapper mapper;
 
@@ -38,13 +40,15 @@ public class PolygonServiceImpl implements PolygonService {
         return Optional.empty();
     }
 
+    @Timed(value = TIMER_NAME)
     @Override
     public GeoJsonGeometry getPolygonIntersection(long firstPolygonId, long secondPolygonId) throws JsonProcessingException {
         return mapper.readValue(repository.getPolygonIntersection(firstPolygonId, secondPolygonId), GeoJsonGeometry.class);
     }
 
     private List<List<Point>> getPolygonPoints(String geometry) throws JsonProcessingException {
-        List<List<List<Double>>> polygonPoints = mapper.readValue(geometry, new TypeReference<>() {});
+        List<List<List<Double>>> polygonPoints = mapper.readValue(geometry, new TypeReference<>() {
+        });
         return polygonPoints.stream()
                 .map(this::getPoints)
                 .collect(Collectors.toUnmodifiableList());
