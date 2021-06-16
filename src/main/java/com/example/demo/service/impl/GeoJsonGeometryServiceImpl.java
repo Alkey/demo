@@ -13,10 +13,11 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class GeoJsonGeometryServiceImpl implements GeoJsonGeometryService {
+    private static final String COUNTER_NAME = "geometry_count";
     private final LineService lineService;
     private final PolygonService polygonService;
 
-    @Count
+    @Count(counterName = COUNTER_NAME)
     @Override
     public boolean add(GeoJsonGeometry geometry) {
         if (geometry.getType().equalsIgnoreCase("linestring")) {
