@@ -20,16 +20,14 @@ public class GeoJsonGeometryServiceImpl implements GeoJsonGeometryService {
 
     @Override
     public boolean add(GeoJsonGeometry geometry) {
-        if (geometry.getType().equalsIgnoreCase("linestring")) {
-            if (lineService.add(((GeoJsonLineGeometry) geometry).toEntity())) {
-                registry.counter(COUNTER_NAME).increment();
-                return true;
-            }
-        } else if (geometry.getType().equalsIgnoreCase("polygon")) {
-            if (polygonService.add(((GeoJsonPolygonGeometry) geometry).toEntity())) {
-                registry.counter(COUNTER_NAME).increment();
-                return true;
-            }
+        if (geometry.getType().equalsIgnoreCase("linestring")
+                && lineService.add(((GeoJsonLineGeometry) geometry).toEntity())) {
+            registry.counter(COUNTER_NAME).increment();
+            return true;
+        } else if (geometry.getType().equalsIgnoreCase("polygon")
+                && polygonService.add(((GeoJsonPolygonGeometry) geometry).toEntity())) {
+            registry.counter(COUNTER_NAME).increment();
+            return true;
         }
         return false;
     }
