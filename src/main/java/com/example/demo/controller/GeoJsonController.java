@@ -2,7 +2,6 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.GeoJsonGeometry;
 import com.example.demo.service.GeoJsonGeometryService;
-import com.example.demo.service.RestoreGeometryDataService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,7 +16,6 @@ import javax.validation.Valid;
 @RequestMapping("/geojson")
 public class GeoJsonController {
     private final GeoJsonGeometryService geometryService;
-    private final RestoreGeometryDataService restoreService;
 
     @PostMapping
     public ResponseEntity<Void> save(@RequestBody @Valid GeoJsonGeometry geometry) {
@@ -26,10 +24,6 @@ public class GeoJsonController {
 
     @PostMapping("/restore")
     public ResponseEntity<Void> restore() {
-        try {
-            return restoreService.restore() ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
+        return geometryService.restore() ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
     }
 }
