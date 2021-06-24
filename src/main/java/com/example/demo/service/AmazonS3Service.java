@@ -7,5 +7,5 @@ import java.io.File;
 public interface AmazonS3Service {
     void save(File file);
 
-    S3Object getBackupFile();
+    S3Object getFile(String fileName);
 }
