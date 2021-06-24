@@ -15,10 +15,15 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 @RequestMapping("/geojson")
 public class GeoJsonController {
-    private final GeoJsonGeometryService service;
+    private final GeoJsonGeometryService geometryService;
 
     @PostMapping
     public ResponseEntity<Void> save(@RequestBody @Valid GeoJsonGeometry geometry) {
-        return service.add(geometry) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
+        return geometryService.add(geometry) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
+    }
+
+    @PostMapping("/restore")
+    public ResponseEntity<Void> restore() {
+        return geometryService.restore() ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
     }
 }
