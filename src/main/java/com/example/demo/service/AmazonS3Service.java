@@ -5,7 +5,7 @@ import com.amazonaws.services.s3.model.S3Object;
 import java.io.File;
 
 public interface AmazonS3Service {
-    void save(File file);
+    void save(String fileName, File file);
 
-    S3Object getFile(String fileName);
+    S3Object getS3Object(String fileName);
 }

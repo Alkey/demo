@@ -6,7 +6,7 @@ import com.example.demo.entity.GeoJsonPolygonGeometry;
 import com.example.demo.service.GeoJsonGeometryService;
 import com.example.demo.service.LineService;
 import com.example.demo.service.PolygonService;
-import com.example.demo.service.RestoreGeometryDataService;
+import com.example.demo.service.BackupGeometryDataService;
 import com.example.demo.util.Count;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,7 +17,7 @@ public class GeoJsonGeometryServiceImpl implements GeoJsonGeometryService {
     private static final String COUNTER_NAME = "geometry_count";
     private final LineService lineService;
     private final PolygonService polygonService;
-    private final RestoreGeometryDataService restoreGeometryDataService;
+    private final BackupGeometryDataService backupGeometryDataService;
 
     @Count(counterName = COUNTER_NAME)
     @Override
@@ -31,6 +31,6 @@ public class GeoJsonGeometryServiceImpl implements GeoJsonGeometryService {
     }
 
     public boolean restore() {
-        return restoreGeometryDataService.restore();
+        return backupGeometryDataService.restore();
     }
 }

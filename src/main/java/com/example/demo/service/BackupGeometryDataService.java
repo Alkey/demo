@@ -1,5 +1,5 @@
 package com.example.demo.service;
 
-public interface RestoreGeometryDataService {
+public interface BackupGeometryDataService {
     boolean restore();
 }

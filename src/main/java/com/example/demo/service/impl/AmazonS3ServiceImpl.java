@@ -10,7 +10,6 @@ import java.io.File;
 
 @Service
 public class AmazonS3ServiceImpl implements AmazonS3Service {
-    private static final String BACKUP_FILE_NAME = "backup.sql";
     private final AmazonS3 client;
     private final String bucket;
 
@@ -21,12 +20,12 @@ public class AmazonS3ServiceImpl implements AmazonS3Service {
     }
 
     @Override
-    public void save(File file) {
-        client.putObject(bucket, BACKUP_FILE_NAME, file);
+    public void save(String fileName, File file) {
+        client.putObject(bucket, fileName, file);
     }
 
     @Override
-    public S3Object getFile(String fileName) {
+    public S3Object getS3Object(String fileName) {
         return client.getObject(bucket, fileName);
     }
 }
