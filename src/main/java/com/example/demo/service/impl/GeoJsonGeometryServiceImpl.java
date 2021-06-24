@@ -31,6 +31,6 @@ public class GeoJsonGeometryServiceImpl implements GeoJsonGeometryService {
     }
 
     public boolean restore() {
-        return backupGeometryDataService.restore();
+        return backupGeometryDataService.restoreGeometries();
     }
 }

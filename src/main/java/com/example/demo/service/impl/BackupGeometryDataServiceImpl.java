@@ -4,8 +4,7 @@ import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.example.demo.service.AmazonS3Service;
 import com.example.demo.service.BackupGeometryDataService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -17,9 +16,9 @@ import java.nio.file.Files;
 import java.util.List;
 
 @Service
+@Slf4j
 @EnableScheduling
 public class BackupGeometryDataServiceImpl implements BackupGeometryDataService {
-    private static final Logger LOGGER = LoggerFactory.getLogger(BackupGeometryDataServiceImpl.class);
     private static final String BACKUP_FILE_NAME = "backup.sql";
     private static final String RESTORE_FILE_NAME = "restore.sql";
     private final AmazonS3Service amazonS3Service;
@@ -44,7 +43,7 @@ public class BackupGeometryDataServiceImpl implements BackupGeometryDataService 
     }
 
     @Override
-    public boolean restore() {
+    public boolean restoreGeometries() {
         S3Object s3Object = amazonS3Service.getS3Object(BACKUP_FILE_NAME);
         File file = new File(RESTORE_FILE_NAME);
         try (S3ObjectInputStream inputStream = s3Object.getObjectContent()) {
@@ -55,7 +54,7 @@ public class BackupGeometryDataServiceImpl implements BackupGeometryDataService 
                 return builder.start().waitFor() == 0 && file.delete();
             }
         } catch (Exception e) {
-            LOGGER.error("Can't restore db");
+            log.error(e.getMessage());
         }
         return false;
     }
