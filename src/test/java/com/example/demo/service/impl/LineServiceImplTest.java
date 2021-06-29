@@ -8,15 +8,16 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
 
 public class LineServiceImplTest {
-    private static final long ID = 1L;
+    private static final long ID = 1;
     private static final String NAME = "Line";
     private static final double LENGTH = 123.122;
     private static final String GEOMETRY = "[[28.494243622,49.283259954],[28.500595093,49.279004601]]";
@@ -27,24 +28,20 @@ public class LineServiceImplTest {
     private final LineServiceImpl service = new LineServiceImpl(repository, mapper);
 
     @Test
-    public void shouldReturnEmptyOptionalWhenLineNotExist() throws JsonProcessingException {
+    public void shouldReturnEmptyOptionalWhenFindByIdNotExistingLine() throws JsonProcessingException {
         when(repository.findById(ID)).thenReturn(Optional.empty());
         assertThat(service.findById(ID), is(Optional.empty()));
-        verify(repository).findById(ID);
     }
 
     @Test
-    public void shouldReturnLineWithLengthDtoWhenLineExist() throws JsonProcessingException {
+    public void shouldReturnLineWithLengthDtoWhenFindByIdLine() throws JsonProcessingException {
         Optional<Line> optionalLine = Optional.of(new Line(ID, NAME, GEOMETRY, LENGTH));
-        List<Point> points = List.of(
-                new Point(28.494243622, 49.283259954),
-                new Point(28.500595093, 49.279004601));
-        Optional<LineWithLengthDto> dto = Optional.of(new LineWithLengthDto(NAME, points.get(0), points.get(1), LENGTH));
+        Point startPoint = new Point(28.494243622, 49.283259954);
+        Point endPoint = new Point(28.500595093, 49.279004601);
+        Optional<LineWithLengthDto> dto = Optional.of(new LineWithLengthDto(NAME, startPoint, endPoint, LENGTH));
 
         when(repository.findById(ID)).thenReturn(optionalLine);
 
         assertThat(service.findById(ID), is(dto));
-
-        verify(repository).findById(ID);
     }
 }

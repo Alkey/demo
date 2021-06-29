@@ -8,10 +8,12 @@ import com.example.demo.service.PolygonService;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Random;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class GeoJsonGeometryServiceImplTest {
     private final LineService lineService = mock(LineService.class);
@@ -21,28 +23,28 @@ public class GeoJsonGeometryServiceImplTest {
             polygonService, backupGeometryDataService);
 
     @Test
-    public void shouldReturnTrueWhenGeometryIsLineString() {
+    public void shouldReturnTrueWhenAddLineStringGeometry() {
         GeoJsonLineGeometry lineString = new GeoJsonLineGeometry(List.of(
-                List.of(28.494243622, 49.283259954),
-                List.of(28.500595093, 49.279004601)));
+                getListWithRandomDoubles(),
+                getListWithRandomDoubles()));
         when(lineService.add(lineString.toEntity())).thenReturn(true);
 
         assertThat(service.add(lineString), is(true));
-
-        verify(lineService).add(lineString.toEntity());
     }
 
     @Test
-    public void shouldReturnTrueWhenGeometryIsPolygon() {
+    public void shouldReturnTrueWhenAddPolygonGeometry() {
         GeoJsonPolygonGeometry polygon = new GeoJsonPolygonGeometry(List.of(List.of(
-                List.of(28.507118225, 49.267132467),
-                List.of(28.510894775, 49.260355109),
-                List.of(28.516817093, 49.264612071),
-                List.of(28.507118225, 49.267132467))));
+                getListWithRandomDoubles(),
+                getListWithRandomDoubles(),
+                getListWithRandomDoubles(),
+                getListWithRandomDoubles())));
         when(polygonService.add(polygon.toEntity())).thenReturn(true);
 
         assertThat(service.add(polygon), is(true));
+    }
 
-        verify(polygonService).add(polygon.toEntity());
+    private List<Double> getListWithRandomDoubles() {
+        return List.of(new Random().nextDouble(), new Random().nextDouble());
     }
 }
