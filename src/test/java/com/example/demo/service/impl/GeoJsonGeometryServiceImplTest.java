@@ -21,9 +21,10 @@ public class GeoJsonGeometryServiceImplTest {
     private final BackupGeometryDataService backupGeometryDataService = mock(BackupGeometryDataService.class);
     private final GeoJsonGeometryServiceImpl service = new GeoJsonGeometryServiceImpl(lineService,
             polygonService, backupGeometryDataService);
+    private final Random random = new Random();
 
     @Test
-    public void shouldReturnTrueWhenAddLineStringGeometry() {
+    public void addLineStringGeometryTest() {
         GeoJsonLineGeometry lineString = new GeoJsonLineGeometry(List.of(
                 getListWithRandomDoubles(),
                 getListWithRandomDoubles()));
@@ -33,7 +34,7 @@ public class GeoJsonGeometryServiceImplTest {
     }
 
     @Test
-    public void shouldReturnTrueWhenAddPolygonGeometry() {
+    public void addPolygonGeometryTest() {
         GeoJsonPolygonGeometry polygon = new GeoJsonPolygonGeometry(List.of(List.of(
                 getListWithRandomDoubles(),
                 getListWithRandomDoubles(),
@@ -45,6 +46,6 @@ public class GeoJsonGeometryServiceImplTest {
     }
 
     private List<Double> getListWithRandomDoubles() {
-        return List.of(new Random().nextDouble(), new Random().nextDouble());
+        return List.of(random.nextDouble(), random.nextDouble());
     }
 }
