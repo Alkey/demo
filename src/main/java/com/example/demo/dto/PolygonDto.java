@@ -32,6 +32,6 @@ public class PolygonDto {
     private String getRing(List<Point> points) {
         return points.stream()
                 .map(Point::toString)
-                .collect(Collectors.joining(", ", "(", ")"));
+                .collect(Collectors.joining(",", "(", ")"));
     }
 }
