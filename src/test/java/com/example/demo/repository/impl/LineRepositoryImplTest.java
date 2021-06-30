@@ -27,7 +27,8 @@ public class LineRepositoryImplTest {
     @Test
     public void addLineTest() {
         double length = 3110.0793182072207;
-        assertThat(repository.add(NAME, LOCATION), is(1));
+        int addedRows = 1;
+        assertThat(repository.add(NAME, LOCATION), is(addedRows));
         Line line = dsl.select(LINE.ID, LINE.NAME, stAsText(LINE.GEOMETRY).as("geometry"), LINE.LENGTH)
                 .from(LINE)
                 .where(LINE.NAME.eq(NAME))

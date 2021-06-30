@@ -37,7 +37,8 @@ public class ClientRepositoryImplTest {
                 .returningResult(CLIENT.ID)
                 .fetchOne()
                 .into(long.class);
-        assertThat(repository.setRole(id, Role.ADMIN), is(1));
+        int addedRows = 1;
+        assertThat(repository.setRole(id, Role.ADMIN), is(addedRows));
         Role role = dsl.select(CLIENT.ROLE)
                 .from(CLIENT)
                 .where(CLIENT.ID.eq(id))

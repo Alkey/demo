@@ -26,8 +26,9 @@ public class PolygonRepositoryImplTest {
 
     @Test
     public void addPolygonTest() {
+        int addedRows = 1;
         double area = 88051.12520456314;
-        assertThat(repository.add(NAME_FIRST, POLYGON_FIRST), is(1));
+        assertThat(repository.add(NAME_FIRST, POLYGON_FIRST), is(addedRows));
         Polygon polygon = dsl.select(POLYGON.ID, POLYGON.NAME, stAsText(POLYGON.GEOMETRY).as("geometry"), POLYGON.AREA)
                 .from(POLYGON)
                 .where(POLYGON.NAME.eq(NAME_FIRST))

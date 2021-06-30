@@ -43,12 +43,13 @@ public class ProductRepositoryImplTest {
 
     @Test
     public void deleteProductTest() {
+        int removedRows = 1;
         long id = dsl.insertInto(PRODUCT, PRODUCT.NAME, PRODUCT.PRICE)
                 .values(NAME, PRICE)
                 .returningResult(PRODUCT.ID)
                 .fetchOne()
                 .into(long.class);
-        assertThat(repository.delete(id), is(1));
+        assertThat(repository.delete(id), is(removedRows));
     }
 
     @AfterEach
