@@ -22,7 +22,7 @@ public class LineDto {
 
     @Override
     public String toString() {
-        return "LINESTRING(" + startPoint.toString() + ", "
+        return "LINESTRING(" + startPoint.toString() + ","
                 + endPoint.toString() + ")";
     }
 }
