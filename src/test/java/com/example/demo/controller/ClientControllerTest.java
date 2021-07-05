@@ -1,22 +1,27 @@
 package com.example.demo.controller;
 
-import com.example.demo.SecurityTestConfig;
 import com.example.demo.dto.ClientCreateDto;
 import com.example.demo.entity.Client;
 import com.example.demo.entity.Role;
 import com.example.demo.repository.ClientRepository;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicHeader;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -24,7 +29,6 @@ import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ContextConfiguration(classes = SecurityTestConfig.class)
 public class ClientControllerTest {
     private static final String URL = "http://localhost:";
     @MockBean
@@ -33,8 +37,9 @@ public class ClientControllerTest {
     private PasswordEncoder encoder;
     @LocalServerPort
     private int port;
-
-    private final TestRestTemplate restTemplate = new TestRestTemplate();
+    @Value("#{environment.PASSWORD}")
+    private String password;
+    private final TestRestTemplate restTemplate = new TestRestTemplate(TestRestTemplate.HttpClientOption.ENABLE_COOKIES);
 
     @Test
     public void createClientTest() {
@@ -69,5 +74,18 @@ public class ClientControllerTest {
         when(repository.setRole(clientId, role)).thenReturn(1);
         ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.PUT, null, String.class);
         assertThat(responseEntity.getStatusCode(), is(HttpStatus.OK));
+    }
+
+    @BeforeEach
+    public void getJSessionId() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+        map.add("username", "admin");
+        map.add("password", password);
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
+        String cookie = restTemplate.postForEntity(URL + port + "/login", request, String.class).getHeaders().get("Set-Cookie").get(0);
+        CloseableHttpClient httpClient = HttpClients.custom().setDefaultHeaders(List.of(new BasicHeader("Cookie", cookie))).build();
+        restTemplate.getRestTemplate().setRequestFactory(new HttpComponentsClientHttpRequestFactory(httpClient));
     }
 }
