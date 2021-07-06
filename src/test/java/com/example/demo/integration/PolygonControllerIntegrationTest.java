@@ -1,11 +1,10 @@
-package com.example.demo.controller;
+package com.example.demo.integration;
 
 import com.example.demo.dto.PolygonDto;
 import com.example.demo.dto.PolygonWithAreaDto;
 import com.example.demo.entity.GeoJsonGeometry;
 import com.example.demo.entity.GeoJsonPolygonGeometry;
 import com.example.demo.entity.Point;
-import com.example.demo.jooq.sample.model.tables.Polygon;
 import org.jooq.DSLContext;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -22,14 +21,15 @@ import java.util.List;
 
 import static com.example.demo.ConnectionUtils.getConnection;
 import static com.example.demo.jooq.sample.model.tables.Polygon.POLYGON;
-import static com.example.demo.util.PostGisUtil.*;
+import static com.example.demo.util.PostGisUtil.stArea;
+import static com.example.demo.util.PostGisUtil.stGeomFromText;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.val;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class PolygonControllerTest {
+public class PolygonControllerIntegrationTest {
     private static final List<List<Point>> POINTS = List.of(List.of(
             new Point(1, 1),
             new Point(2, 1),

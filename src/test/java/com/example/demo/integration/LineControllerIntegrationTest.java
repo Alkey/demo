@@ -1,4 +1,4 @@
-package com.example.demo.controller;
+package com.example.demo.integration;
 
 import com.example.demo.dto.LineDto;
 import com.example.demo.dto.LineWithLengthDto;
@@ -27,7 +27,7 @@ import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.val;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class LineControllerTest {
+public class LineControllerIntegrationTest {
     private static final long INCORRECT_ID = 1;
     private static final String LOCATION = "LINESTRING(1 0,1 1)";
     private static final String NAME = "line";
