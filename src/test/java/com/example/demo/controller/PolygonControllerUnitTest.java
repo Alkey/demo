@@ -15,6 +15,9 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.List;
 import java.util.Optional;
 
+import static com.example.demo.util.ObjectMapperUtil.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -35,7 +38,7 @@ public class PolygonControllerUnitTest {
     private final PolygonService service = mock(PolygonService.class);
     private final PolygonController controller = new PolygonController(service);
     private final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
-    private final ObjectMapper mapper = new ObjectMapper();
+    private final ObjectMapper mapper = getMapper();
 
     @Test
     public void addPolygonTest() throws Exception {
@@ -61,8 +64,13 @@ public class PolygonControllerUnitTest {
     public void getPolygonTest() throws Exception {
         PolygonWithAreaDto dto = new PolygonWithAreaDto(NAME, POINTS, 122.2);
         when(service.findById(ID)).thenReturn(Optional.of(dto));
-        mockMvc.perform(get(URL + "/{id}", ID))
-                .andExpect(status().isOk());
+        String content = mockMvc.perform(get(URL + "/{id}", ID))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+        PolygonWithAreaDto result = mapper.readValue(content, PolygonWithAreaDto.class);
+        assertThat(result, is(dto));
     }
 
     @Test
@@ -82,9 +90,14 @@ public class PolygonControllerUnitTest {
                         List.of(2.0, 1.5),
                         List.of(1.5, 1.0))));
         when(service.getPolygonIntersection(ID, 2)).thenReturn(polygon);
-        mockMvc.perform(get(URL + "/intersection")
+        String content = mockMvc.perform(get(URL + "/intersection")
                 .param("firstId", "1")
                 .param("secondId", "2"))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+        GeoJsonGeometry result = mapper.readValue(content, GeoJsonPolygonGeometry.class);
+        assertThat(result, is(polygon));
     }
 }

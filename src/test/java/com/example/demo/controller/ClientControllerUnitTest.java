@@ -9,6 +9,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import static com.example.demo.util.ObjectMapperUtil.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -18,19 +21,23 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ClientControllerUnitTest {
     private static final String SET_ROLE_ENDPOINT = "/clients/set-role/{clientId}/{role}";
     private static final long ID = 1;
-    private final ObjectMapper mapper = new ObjectMapper();
     private final ClientService service = mock(ClientService.class);
     private final ClientController controller = new ClientController(service);
     private final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+    private final ObjectMapper mapper = getMapper();
 
     @Test
     public void createClientTest() throws Exception {
         ClientCreateDto dto = new ClientCreateDto("User", "123", "123");
         when(service.add(dto)).thenReturn(ID);
-        mockMvc.perform(post("/clients/add")
+        long content = Long.parseLong(mockMvc.perform(post("/clients/add")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(mapper.writeValueAsString(dto)))
-                .andExpect(status().isOk());
+                .content(getMapper().writeValueAsString(dto)))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString());
+        assertThat(content, is(ID));
     }
 
     @Test

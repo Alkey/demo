@@ -13,11 +13,13 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.Optional;
 
+import static com.example.demo.util.ObjectMapperUtil.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class LineControllerUnitTest {
@@ -27,11 +29,10 @@ public class LineControllerUnitTest {
     private final LineService service = mock(LineService.class);
     private final LineController controller = new LineController(service);
     private final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
-    private final ObjectMapper mapper = new ObjectMapper();
+    private final ObjectMapper mapper = getMapper();
 
     @Test
     public void addLineTest() throws Exception {
-
         when(service.add(LINE_DTO)).thenReturn(true);
         mockMvc.perform(post("/line")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -53,8 +54,13 @@ public class LineControllerUnitTest {
         LineWithLengthDto dto = new LineWithLengthDto(LINE_DTO.getName(), LINE_DTO.getStartPoint(),
                 LINE_DTO.getEndPoint(), 1);
         when(service.findById(ID)).thenReturn(Optional.of(dto));
-        mockMvc.perform(get(GET_LINE_ENDPOINT, ID))
-                .andExpect(status().isOk());
+        String content = mockMvc.perform(get(GET_LINE_ENDPOINT, ID))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+        LineWithLengthDto result = mapper.readValue(content, LineWithLengthDto.class);
+        assertThat(result, is(dto));
     }
 
     @Test
@@ -73,13 +79,17 @@ public class LineControllerUnitTest {
 
     @Test
     public void getLineStringIntersectionTest() throws Exception {
-        when(service.getLineStringIntersection(ID, 2)).thenReturn(Optional.of(new Point(1, 1)));
-        mockMvc.perform(get("/line/intersection")
+        Point point = new Point(1, 1);
+        when(service.getLineStringIntersection(ID, 2)).thenReturn(Optional.of(point));
+        String content = mockMvc.perform(get("/line/intersection")
                 .param("firstId", "1")
                 .param("secondId", "2"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.lat").value(1))
-                .andExpect(jsonPath("$.lon").value(1));
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+        Point result = mapper.readValue(content, Point.class);
+        assertThat(result, is(point));
     }
 
     @Test

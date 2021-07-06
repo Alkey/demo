@@ -11,6 +11,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.List;
 
+import static com.example.demo.util.ObjectMapperUtil.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.mock;
@@ -24,16 +25,20 @@ public class ProductControllerUnitTest {
     private final ProductService service = mock(ProductService.class);
     private final ProductController controller = new ProductController(service);
     private final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
-    private final ObjectMapper mapper = new ObjectMapper();
+    private final ObjectMapper mapper = getMapper();
 
     @Test
     public void addProductTest() throws Exception {
         Product product = createProduct("name", 25.2);
-        when(service.add(product)).thenReturn(1L);
-        mockMvc.perform(post(URL)
+        when(service.add(product)).thenReturn(ID);
+        long result = Long.parseLong(mockMvc.perform(post(URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(product)))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString());
+        assertThat(result, is(ID));
     }
 
     @Test
@@ -45,7 +50,8 @@ public class ProductControllerUnitTest {
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
-        List<Product> result = mapper.readValue(content, new TypeReference<>() {});
+        List<Product> result = mapper.readValue(content, new TypeReference<>() {
+        });
         assertThat(result, is(products));
     }
 

@@ -11,6 +11,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.List;
 
+import static com.example.demo.util.ObjectMapperUtil.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -28,7 +29,7 @@ public class GeoJsonControllerUnitTest {
     private final GeoJsonGeometryService service = mock(GeoJsonGeometryService.class);
     private final GeoJsonController controller = new GeoJsonController(service);
     private final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
-    private final ObjectMapper mapper = new ObjectMapper();
+    private final ObjectMapper mapper = getMapper();
 
     @Test
     public void saveGeometryTest() throws Exception {
