@@ -19,8 +19,7 @@ public class LineServiceImplTest {
     private static final String NAME = "Line";
     private static final String GEOMETRY = "[[28.494243622,49.283259954],[28.500595093,49.279004601]]";
     private final LineRepository repository = mock(LineRepository.class);
-    private final ObjectMapper mapper = spy(ObjectMapper.class);
-    private final LineServiceImpl service = new LineServiceImpl(repository, mapper);
+    private final LineServiceImpl service = new LineServiceImpl(repository);
 
     @Test
     public void findByIdNotExistingLineTest() throws JsonProcessingException {

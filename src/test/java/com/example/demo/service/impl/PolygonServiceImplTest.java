@@ -20,8 +20,7 @@ public class PolygonServiceImplTest {
     private static final String NAME = "Polygon";
     private static final String GEOMETRY = "[[[28.507118225,49.267132467],[28.510894775,49.260355109],[28.516817093,49.264612071],[28.507118225,49.267132467]]]";
     private final PolygonRepository repository = mock(PolygonRepository.class);
-    private final ObjectMapper mapper = spy(ObjectMapper.class);
-    private final PolygonServiceImpl service = new PolygonServiceImpl(repository, mapper);
+    private final PolygonServiceImpl service = new PolygonServiceImpl(repository);
 
     @Test
     public void findByIdNotExistingPolygonTest() throws JsonProcessingException {
