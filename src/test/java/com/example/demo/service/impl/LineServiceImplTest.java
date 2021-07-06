@@ -5,14 +5,14 @@ import com.example.demo.entity.Line;
 import com.example.demo.entity.Point;
 import com.example.demo.repository.LineRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class LineServiceImplTest {
     private static final long ID = 1;
