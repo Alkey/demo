@@ -1,4 +1,4 @@
-package com.example.demo.controller;
+package com.example.demo.integration;
 
 import org.jooq.DSLContext;
 import org.junit.jupiter.api.AfterEach;
@@ -23,7 +23,7 @@ import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.val;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class LinePolygonUtilsControllerTest {
+public class LinePolygonUtilsControllerIntegrationTest {
     private static final String URL = "http://localhost:";
     private static final String POLYGON_GEOMETRY = "POLYGON((1 1,2 1,2 2,1 1))";
     private static final DSLContext dsl = getConnection();

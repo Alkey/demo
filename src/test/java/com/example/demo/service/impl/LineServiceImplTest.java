@@ -5,22 +5,21 @@ import com.example.demo.entity.Line;
 import com.example.demo.entity.Point;
 import com.example.demo.repository.LineRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class LineServiceImplTest {
     private static final long ID = 1;
     private static final String NAME = "Line";
     private static final String GEOMETRY = "[[28.494243622,49.283259954],[28.500595093,49.279004601]]";
     private final LineRepository repository = mock(LineRepository.class);
-    private final ObjectMapper mapper = spy(ObjectMapper.class);
-    private final LineServiceImpl service = new LineServiceImpl(repository, mapper);
+    private final LineServiceImpl service = new LineServiceImpl(repository);
 
     @Test
     public void findByIdNotExistingLineTest() throws JsonProcessingException {

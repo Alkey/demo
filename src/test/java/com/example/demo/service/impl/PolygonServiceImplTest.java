@@ -5,7 +5,6 @@ import com.example.demo.entity.Point;
 import com.example.demo.entity.Polygon;
 import com.example.demo.repository.PolygonRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -13,15 +12,15 @@ import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class PolygonServiceImplTest {
     private static final long ID = 1;
     private static final String NAME = "Polygon";
     private static final String GEOMETRY = "[[[28.507118225,49.267132467],[28.510894775,49.260355109],[28.516817093,49.264612071],[28.507118225,49.267132467]]]";
     private final PolygonRepository repository = mock(PolygonRepository.class);
-    private final ObjectMapper mapper = spy(ObjectMapper.class);
-    private final PolygonServiceImpl service = new PolygonServiceImpl(repository, mapper);
+    private final PolygonServiceImpl service = new PolygonServiceImpl(repository);
 
     @Test
     public void findByIdNotExistingPolygonTest() throws JsonProcessingException {

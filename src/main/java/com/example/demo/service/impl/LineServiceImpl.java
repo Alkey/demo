@@ -8,7 +8,6 @@ import com.example.demo.repository.LineRepository;
 import com.example.demo.service.LineService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,12 +16,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.example.demo.util.ObjectMapperUtil.getMapper;
+
 @Service
 @RequiredArgsConstructor
 public class LineServiceImpl implements LineService {
     private static final String TIMER_NAME = "line_string_intersection_time";
     private final LineRepository repository;
-    private final ObjectMapper mapper;
 
     @Override
     public boolean add(LineDto dto) {
@@ -49,8 +49,7 @@ public class LineServiceImpl implements LineService {
     }
 
     private Optional<Point> getPoint(String geometry) throws JsonProcessingException {
-        List<Double> coordinates = mapper.readValue(geometry, new TypeReference<>() {
-        });
+        List<Double> coordinates = getMapper().readValue(geometry, new TypeReference<>() {});
         if (coordinates.size() >= 2) {
             return Optional.of(new Point(coordinates.get(0), coordinates.get(1)));
         }
@@ -58,8 +57,7 @@ public class LineServiceImpl implements LineService {
     }
 
     private List<Point> getPoints(String line) throws JsonProcessingException {
-        return mapper.readValue(line, new TypeReference<List<List<Double>>>() {
-        }).stream()
+        return getMapper().readValue(line, new TypeReference<List<List<Double>>>() {}).stream()
                 .filter(coordinates -> coordinates.size() >= 2)
                 .map(coordinates -> new Point(coordinates.get(0), coordinates.get(1)))
                 .collect(Collectors.toUnmodifiableList());

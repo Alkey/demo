@@ -1,4 +1,4 @@
-package com.example.demo.controller;
+package com.example.demo.integration;
 
 import com.example.demo.dto.ClientCreateDto;
 import com.example.demo.entity.Client;
@@ -29,7 +29,7 @@ import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class ClientControllerTest {
+public class ClientControllerIntegrationTest {
     private static final String URL = "http://localhost:";
     @MockBean
     private ClientRepository repository;
