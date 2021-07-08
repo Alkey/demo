@@ -65,7 +65,7 @@ public class BackupGeometryDataServiceImpl implements BackupGeometryDataService 
         ProcessBuilder builder = new ProcessBuilder(getBackupCommand(file.getAbsolutePath()));
         builder.environment().put("PGPASSWORD", password);
         if (builder.start().waitFor() == 0) {
-//            amazonS3Service.save(BACKUP_FILE_NAME, file);
+            amazonS3Service.save(BACKUP_FILE_NAME, file);
             file.delete();
         } else {
             throw new RuntimeException("Can't create backup.sql");

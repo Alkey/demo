@@ -57,8 +57,7 @@ public class PolygonServiceImpl implements PolygonService {
     }
 
     private List<List<Point>> getPolygonPoints(String geometry) throws JsonProcessingException {
-        List<List<List<Double>>> polygonPoints = getMapper().readValue(geometry, new TypeReference<>() {
-        });
+        List<List<List<Double>>> polygonPoints = getMapper().readValue(geometry, new TypeReference<>() {});
         return polygonPoints.stream()
                 .map(this::getPoints)
                 .collect(Collectors.toUnmodifiableList());

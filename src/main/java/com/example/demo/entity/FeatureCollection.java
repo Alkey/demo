@@ -7,6 +7,6 @@ import java.util.List;
 
 @Data
 public class FeatureCollection implements Serializable {
-    long id;
-    List<GeoJsonGeometry> features;
+    private long id;
+    private List<GeoJsonGeometry> features;
 }

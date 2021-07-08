@@ -60,8 +60,7 @@ public class LineServiceImpl implements LineService {
     }
 
     private Optional<Point> getPoint(String geometry) throws JsonProcessingException {
-        List<Double> coordinates = getMapper().readValue(geometry, new TypeReference<>() {
-        });
+        List<Double> coordinates = getMapper().readValue(geometry, new TypeReference<>() {});
         if (coordinates.size() >= 2) {
             return Optional.of(new Point(coordinates.get(0), coordinates.get(1)));
         }
@@ -69,8 +68,7 @@ public class LineServiceImpl implements LineService {
     }
 
     private List<Point> getPoints(String line) throws JsonProcessingException {
-        return getMapper().readValue(line, new TypeReference<List<List<Double>>>() {
-        }).stream()
+        return getMapper().readValue(line, new TypeReference<List<List<Double>>>() {}).stream()
                 .filter(coordinates -> coordinates.size() >= 2)
                 .map(coordinates -> new Point(coordinates.get(0), coordinates.get(1)))
                 .collect(Collectors.toUnmodifiableList());
