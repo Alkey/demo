@@ -79,6 +79,14 @@
             <artifactId>aws-java-sdk-s3</artifactId>
             <version>1.12.8</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+    <dependency>
+        <groupId>redis.clients</groupId>
+        <artifactId>jedis</artifactId>
+    </dependency>
     </dependencies>
 
     <build>
@@ -117,7 +125,7 @@
                                     <name>
                                         org.jooq.meta.postgres.PostgresDatabase
                                     </name>
-                                    <includes>client|product|line|polygon</includes>
+                                    <includes>client|product|line|polygon|feature_collection</includes>
                                     <inputSchema>public</inputSchema>
                                 </database>
                                 <generate>

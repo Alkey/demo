@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import static com.example.demo.jooq.sample.model.tables.Line.LINE;
@@ -48,5 +49,15 @@ public class LineRepositoryImpl implements LineRepository {
                 .from(table(name(FIRST_LINE)), LINE)
                 .where(LINE.ID.eq(secondLineId))
                 .fetchOneInto(String.class);
+    }
+
+    @Override
+    public List<String> getContainedInPolygonGeometries(String polygon) {
+        return dsl.select(convertToGeoJsonAndCoordinates(LINE.GEOMETRY))
+                .from(LINE)
+                .where(stIntersects(LINE.GEOMETRY, stGeomFromText(polygon)))
+                .or((stWithIn(LINE.GEOMETRY, stGeomFromText(polygon))))
+                .fetch()
+                .into(String.class);
     }
 }

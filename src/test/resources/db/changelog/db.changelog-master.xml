@@ -64,4 +64,14 @@
             </column>
         </createTable>
     </changeSet>
+    <changeSet id="5" author="Ivan">
+        <createTable tableName="feature_collection">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="hash" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
 </databaseChangeLog>

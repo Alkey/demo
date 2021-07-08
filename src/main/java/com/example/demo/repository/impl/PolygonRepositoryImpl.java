@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import static com.example.demo.jooq.sample.model.tables.Polygon.POLYGON;
@@ -49,5 +50,15 @@ public class PolygonRepositoryImpl implements PolygonRepository {
                 .from(table(name(FIRST_POLYGON)), POLYGON)
                 .where(POLYGON.ID.eq(secondPolygonId))
                 .fetchOneInto(String.class);
+    }
+
+    @Override
+    public List<String> getContainedInPolygonGeometries(String polygon) {
+        return dsl.select(convertToGeoJsonAndCoordinates(POLYGON.GEOMETRY))
+                .from(POLYGON)
+                .where(stIntersects(POLYGON.GEOMETRY, stGeomFromText(polygon)))
+                .or((stWithIn(POLYGON.GEOMETRY, stGeomFromText(polygon))))
+                .fetch()
+                .into(String.class);
     }
 }
