@@ -1,5 +1,7 @@
 package com.example.demo.repository.impl;
 
+import com.example.demo.converter.GeoJsonGeometryConverter;
+import com.example.demo.entity.GeoJsonGeometry;
 import com.example.demo.entity.Line;
 import com.example.demo.repository.LineRepository;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.example.demo.jooq.sample.model.tables.Line.LINE;
 import static com.example.demo.util.PostGisUtil.*;
@@ -18,6 +21,7 @@ import static org.jooq.impl.DSL.*;
 public class LineRepositoryImpl implements LineRepository {
     private static final String FIRST_LINE = "first_line";
     private static final String FIRST_LINE_GEOMETRY = "first_line_geometry";
+    private final GeoJsonGeometryConverter converter;
     private final DSLContext dsl;
 
     @Override
@@ -52,12 +56,14 @@ public class LineRepositoryImpl implements LineRepository {
     }
 
     @Override
-    public List<String> getContainedInPolygonGeometries(String polygon) {
-        return dsl.select(convertToGeoJsonAndCoordinates(LINE.GEOMETRY))
+    public List<GeoJsonGeometry> getContainedInPolygonGeometries(String polygon) {
+        return dsl.select(convertToGeoJson(LINE.GEOMETRY))
                 .from(LINE)
                 .where(stIntersects(LINE.GEOMETRY, stGeomFromText(polygon)))
-                .or((stWithIn(LINE.GEOMETRY, stGeomFromText(polygon))))
                 .fetch()
-                .into(String.class);
+                .into(String.class)
+                .stream()
+                .map(converter::from)
+                .collect(Collectors.toList());
     }
 }

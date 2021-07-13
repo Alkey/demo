@@ -1,14 +1,14 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.FeatureCollection;
-import com.example.demo.entity.GeoJsonGeometry;
+import com.example.demo.entity.GeoJsonPolygonGeometry;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface FeatureCollectionService {
 
-    boolean add(GeoJsonGeometry geometry);
+    long add(GeoJsonPolygonGeometry geometry);
 
     Optional<FeatureCollection> findById(long id);
 

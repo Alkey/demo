@@ -1,5 +1,6 @@
 package com.example.demo.repository.impl;
 
+import com.example.demo.converter.GeoJsonGeometryConverter;
 import com.example.demo.entity.Polygon;
 import org.jooq.DSLContext;
 import org.junit.jupiter.api.AfterEach;
@@ -15,6 +16,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.val;
+import static org.mockito.Mockito.spy;
 
 public class PolygonRepositoryImplTest {
     private static final String NAME_FIRST = "polygon";
@@ -22,7 +24,8 @@ public class PolygonRepositoryImplTest {
     private static final String POLYGON_FIRST = "POLYGON((28.45634937286377 49.238784596337126,28.454246520996094 49.234665517970974,28.45986843109131 49.235338044024914,28.45634937286377 49.238784596337126))";
     private static final String POLYGON_SECOND = "POLYGON((28.45637083053589 49.236570984675524,28.455727100372314 49.23456744048976,28.46012592315674 49.23483365034289,28.45637083053589 49.236570984675524))";
     private static final DSLContext dsl = getConnection();
-    private final PolygonRepositoryImpl repository = new PolygonRepositoryImpl(dsl);
+    private final GeoJsonGeometryConverter converter = spy(GeoJsonGeometryConverter.class);
+    private final PolygonRepositoryImpl repository = new PolygonRepositoryImpl(converter, dsl);
 
     @Test
     public void addPolygonTest() {

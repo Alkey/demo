@@ -1,5 +1,6 @@
 package com.example.demo.repository;
 
+import com.example.demo.entity.GeoJsonGeometry;
 import com.example.demo.entity.Polygon;
 
 import java.util.List;
@@ -13,5 +14,5 @@ public interface PolygonRepository {
 
     String getPolygonIntersection(long firstPolygonId, long secondPolygonId);
 
-    List<String> getContainedInPolygonGeometries(String polygon);
+    List<GeoJsonGeometry> getContainedInPolygonGeometries(String polygon);
 }

@@ -3,7 +3,6 @@ package com.example.demo.service.impl;
 import com.example.demo.dto.LineDto;
 import com.example.demo.dto.LineWithLengthDto;
 import com.example.demo.entity.GeoJsonGeometry;
-import com.example.demo.entity.GeoJsonLineGeometry;
 import com.example.demo.entity.Line;
 import com.example.demo.entity.Point;
 import com.example.demo.repository.LineRepository;
@@ -12,7 +11,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -53,10 +51,7 @@ public class LineServiceImpl implements LineService {
 
     @Override
     public List<GeoJsonGeometry> getContainedInPolygonLines(String polygon) {
-        List<String> lines = repository.getContainedInPolygonGeometries(polygon);
-        return lines.stream()
-                .map(this::getGeometry)
-                .collect(Collectors.toList());
+        return repository.getContainedInPolygonGeometries(polygon);
     }
 
     private Optional<Point> getPoint(String geometry) throws JsonProcessingException {
@@ -72,11 +67,5 @@ public class LineServiceImpl implements LineService {
                 .filter(coordinates -> coordinates.size() >= 2)
                 .map(coordinates -> new Point(coordinates.get(0), coordinates.get(1)))
                 .collect(Collectors.toUnmodifiableList());
-    }
-
-    @SneakyThrows
-    private GeoJsonGeometry getGeometry(String line) {
-        List<List<Double>> coordinates = getMapper().readValue(line, new TypeReference<>() {});
-        return new GeoJsonLineGeometry(coordinates);
     }
 }

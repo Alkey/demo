@@ -15,9 +15,9 @@ import java.util.List;
 public class FeatureCollectionController {
     private final FeatureCollectionService service;
 
-    @PostMapping("/add")
-    public ResponseEntity<Void> add(@RequestBody GeoJsonPolygonGeometry geometry) {
-        return service.add(geometry) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
+    @PostMapping
+    public ResponseEntity<Long> add(@RequestBody GeoJsonPolygonGeometry geometry) {
+        return ResponseEntity.ok(service.add(geometry));
     }
 
     @GetMapping("/{id}")

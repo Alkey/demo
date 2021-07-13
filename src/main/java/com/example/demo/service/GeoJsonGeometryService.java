@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.entity.FeatureCollection;
 import com.example.demo.entity.GeoJsonGeometry;
+import com.example.demo.entity.GeoJsonPolygonGeometry;
 
 public interface GeoJsonGeometryService {
 
@@ -9,5 +10,5 @@ public interface GeoJsonGeometryService {
 
     boolean restore();
 
-    FeatureCollection getContainedInPolygonGeometries(GeoJsonGeometry geometry);
+    FeatureCollection getContainedInPolygonGeometries(GeoJsonPolygonGeometry geometry);
 }

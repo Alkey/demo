@@ -3,7 +3,6 @@ package com.example.demo.service.impl;
 import com.example.demo.dto.PolygonDto;
 import com.example.demo.dto.PolygonWithAreaDto;
 import com.example.demo.entity.GeoJsonGeometry;
-import com.example.demo.entity.GeoJsonPolygonGeometry;
 import com.example.demo.entity.Point;
 import com.example.demo.entity.Polygon;
 import com.example.demo.repository.PolygonRepository;
@@ -12,7 +11,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -50,10 +48,7 @@ public class PolygonServiceImpl implements PolygonService {
 
     @Override
     public List<GeoJsonGeometry> getContainedInPolygonGeometries(String polygon) {
-        List<String> polygons = repository.getContainedInPolygonGeometries(polygon);
-        return polygons.stream()
-                .map(this::getGeometry)
-                .collect(Collectors.toList());
+        return repository.getContainedInPolygonGeometries(polygon);
     }
 
     private List<List<Point>> getPolygonPoints(String geometry) throws JsonProcessingException {
@@ -68,11 +63,5 @@ public class PolygonServiceImpl implements PolygonService {
                 .filter(coordinates -> coordinates.size() >= 2)
                 .map(coordinates -> new Point(coordinates.get(0), coordinates.get(1)))
                 .collect(Collectors.toUnmodifiableList());
-    }
-
-    @SneakyThrows
-    private GeoJsonGeometry getGeometry(String polygon) {
-        List<List<List<Double>>> polygonPoints = getMapper().readValue(polygon, new TypeReference<>() {});
-        return new GeoJsonPolygonGeometry(polygonPoints);
     }
 }

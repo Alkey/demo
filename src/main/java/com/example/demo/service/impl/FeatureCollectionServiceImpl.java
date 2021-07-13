@@ -1,9 +1,8 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.FeatureCollection;
-import com.example.demo.entity.GeoJsonGeometry;
+import com.example.demo.entity.GeoJsonPolygonGeometry;
 import com.example.demo.repository.FeatureCollectionRepository;
-import com.example.demo.repository.RedisRepository;
 import com.example.demo.service.FeatureCollectionService;
 import com.example.demo.service.GeoJsonGeometryService;
 import lombok.RequiredArgsConstructor;
@@ -15,19 +14,17 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class FeatureCollectionServiceImpl implements FeatureCollectionService {
-    private final FeatureCollectionRepository featureRepository;
-    private final RedisRepository redisRepository;
+    private final FeatureCollectionRepository redisRepository;
     private final GeoJsonGeometryService geometryService;
 
     @Override
-    public boolean add(GeoJsonGeometry geometry) {
+    public long add(GeoJsonPolygonGeometry geometry) {
         FeatureCollection geometries = geometryService.getContainedInPolygonGeometries(geometry);
-        long id = featureRepository.save(geometries);
-        geometries.setId(id);
-        return redisRepository.add(geometries);
+        return redisRepository.add(geometries) ? geometries.getId() : 0;
     }
 
     @Override
+
     public Optional<FeatureCollection> findById(long id) {
         return Optional.of(redisRepository.findById(id));
     }

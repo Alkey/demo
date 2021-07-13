@@ -38,12 +38,13 @@ public class GeoJsonGeometryServiceImpl implements GeoJsonGeometryService {
     }
 
     @Override
-    public FeatureCollection getContainedInPolygonGeometries(GeoJsonGeometry geometry) {
-        String polygon = ((GeoJsonPolygonGeometry) geometry).toEntity().toString();
+    public FeatureCollection getContainedInPolygonGeometries(GeoJsonPolygonGeometry geometry) {
+        String polygon = geometry.toEntity().toString();
         List<GeoJsonGeometry> geometries = lineService.getContainedInPolygonLines(polygon);
         geometries.addAll(polygonService.getContainedInPolygonGeometries(polygon));
         FeatureCollection collection = new FeatureCollection();
         collection.setFeatures(geometries);
+        collection.setId(collection.hashCode());
         return collection;
     }
 }
