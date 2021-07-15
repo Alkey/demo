@@ -17,4 +17,6 @@ import static com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 public interface GeoJsonGeometry extends Serializable {
 
     String getType();
+
+    String toWKTString();
 }

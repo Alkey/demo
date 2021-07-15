@@ -1,6 +1,5 @@
 package com.example.demo.integration;
 
-import com.example.demo.dto.PolygonDto;
 import com.example.demo.dto.PolygonWithAreaDto;
 import com.example.demo.entity.GeoJsonGeometry;
 import com.example.demo.entity.GeoJsonPolygonGeometry;
@@ -30,11 +29,17 @@ import static org.jooq.impl.DSL.val;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class PolygonControllerIntegrationTest {
+    private static final List<List<List<Double>>> COORDINATES = List.of(List.of(
+            List.of(1.5, 1.0),
+            List.of(1.0, 1.0),
+            List.of(1.5, 1.5),
+            List.of(2.0, 1.5),
+            List.of(1.5, 1.0)));
     private static final List<List<Point>> POINTS = List.of(List.of(
-            new Point(1, 1),
-            new Point(2, 1),
-            new Point(2, 2),
-            new Point(1, 1)));
+            new Point(1.0, 1.0),
+            new Point(2.0, 1.0),
+            new Point(2.0, 2.0),
+            new Point(1.0, 1.0)));
     private static final String GEOMETRY = "POLYGON((1 1,2 1,2 2,1 1))";
     private static final String NAME = "polygon";
     private static final String URL = "http://localhost:";
@@ -46,8 +51,8 @@ public class PolygonControllerIntegrationTest {
 
     @Test
     public void addPolygonTest() {
-        PolygonDto dto = new PolygonDto(NAME, POINTS);
-        ResponseEntity<String> responseEntity = restTemplate.postForEntity(URL + port + "polygon", dto, String.class);
+        GeoJsonGeometry geometry = new GeoJsonPolygonGeometry(COORDINATES);
+        ResponseEntity<String> responseEntity = restTemplate.postForEntity(URL + port + "polygon", geometry, String.class);
         assertThat(responseEntity.getStatusCode(), is(HttpStatus.OK));
     }
 

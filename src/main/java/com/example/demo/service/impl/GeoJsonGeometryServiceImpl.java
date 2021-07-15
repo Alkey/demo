@@ -2,7 +2,6 @@ package com.example.demo.service.impl;
 
 import com.example.demo.entity.FeatureCollection;
 import com.example.demo.entity.GeoJsonGeometry;
-import com.example.demo.entity.GeoJsonLineGeometry;
 import com.example.demo.entity.GeoJsonPolygonGeometry;
 import com.example.demo.service.BackupGeometryDataService;
 import com.example.demo.service.GeoJsonGeometryService;
@@ -26,9 +25,9 @@ public class GeoJsonGeometryServiceImpl implements GeoJsonGeometryService {
     @Override
     public boolean add(GeoJsonGeometry geometry) {
         if (geometry.getType().equalsIgnoreCase("linestring")) {
-            return lineService.add(((GeoJsonLineGeometry) geometry).toEntity());
+            return lineService.add(geometry);
         } else if (geometry.getType().equalsIgnoreCase("polygon")) {
-            return polygonService.add(((GeoJsonPolygonGeometry) geometry).toEntity());
+            return polygonService.add(geometry);
         }
         return false;
     }
@@ -39,12 +38,9 @@ public class GeoJsonGeometryServiceImpl implements GeoJsonGeometryService {
 
     @Override
     public FeatureCollection getContainedInPolygonGeometries(GeoJsonPolygonGeometry geometry) {
-        String polygon = geometry.toEntity().toString();
+        String polygon = geometry.toWKTString();
         List<GeoJsonGeometry> geometries = lineService.getContainedInPolygonLines(polygon);
         geometries.addAll(polygonService.getContainedInPolygonGeometries(polygon));
-        FeatureCollection collection = new FeatureCollection();
-        collection.setFeatures(geometries);
-        collection.setId(collection.hashCode());
-        return collection;
+        return new FeatureCollection(geometries.hashCode(), geometries);
     }
 }

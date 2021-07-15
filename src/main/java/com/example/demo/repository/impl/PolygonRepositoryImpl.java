@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static com.example.demo.jooq.sample.model.tables.Polygon.POLYGON;
 import static com.example.demo.util.PostGisUtil.*;
@@ -20,7 +19,7 @@ import static org.jooq.impl.DSL.*;
 @RequiredArgsConstructor
 public class PolygonRepositoryImpl implements PolygonRepository {
     private static final String FIRST_POLYGON = "first_polygon";
-    private static final String FIRST_POLYGON_ID = "first_polygon_id";
+    private static final String FIELD_NAME = "geometry";
     private static final String FIRST_POLYGON_GEOMETRY = "first_polygon_geometry";
     private final GeoJsonGeometryConverter converter;
     private final DSLContext dsl;
@@ -36,7 +35,7 @@ public class PolygonRepositoryImpl implements PolygonRepository {
 
     @Override
     public Optional<Polygon> findById(long id) {
-        return dsl.select(POLYGON.ID, POLYGON.NAME, convertToGeoJsonAndCoordinates(POLYGON.GEOMETRY).as("geometry"), POLYGON.AREA)
+        return dsl.select(POLYGON.ID, POLYGON.NAME, convertToGeoJsonAndCoordinates(POLYGON.GEOMETRY).as(FIELD_NAME), POLYGON.AREA)
                 .from(POLYGON)
                 .where(POLYGON.ID.eq(id))
                 .fetchOptionalInto(Polygon.class);
@@ -58,13 +57,9 @@ public class PolygonRepositoryImpl implements PolygonRepository {
 
     @Override
     public List<GeoJsonGeometry> getContainedInPolygonGeometries(String polygon) {
-        return dsl.select(convertToGeoJson(POLYGON.GEOMETRY))
+        return dsl.select(convertToGeoJson(POLYGON.GEOMETRY).as(FIELD_NAME))
                 .from(POLYGON)
-                .where(stIntersects(POLYGON.GEOMETRY, stGeomFromText(polygon)))
-                .fetch()
-                .into(String.class)
-                .stream()
-                .map(converter::from)
-                .collect(Collectors.toList());
+                .where(isIntersects(POLYGON.GEOMETRY, stGeomFromText(polygon)))
+                .fetch(name(FIELD_NAME), converter);
     }
 }

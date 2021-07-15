@@ -28,11 +28,11 @@ public class PostGisUtil {
         return field("st_area({0}::geography)", double.class, geometryString);
     }
 
-    public static Field<Boolean> stIntersects(Field<String> line, Field<String> polygon) {
+    public static Field<Boolean> isIntersects(Field<String> line, Field<String> polygon) {
         return field("st_intersects({0}, {1})", Boolean.class, line, polygon);
     }
 
-    public static Field<Boolean> stWithIn(Field<String> line, Field<String> polygon) {
+    public static Field<Boolean> isWithIn(Field<String> line, Field<String> polygon) {
         return field("st_within({0}::geometry, {1}::geometry)", Boolean.class, line, polygon);
     }
 

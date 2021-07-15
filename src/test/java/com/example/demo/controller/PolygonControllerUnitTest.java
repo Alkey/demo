@@ -1,6 +1,5 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.PolygonDto;
 import com.example.demo.dto.PolygonWithAreaDto;
 import com.example.demo.entity.GeoJsonGeometry;
 import com.example.demo.entity.GeoJsonPolygonGeometry;
@@ -15,7 +14,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.List;
 import java.util.Optional;
 
-import static com.example.demo.util.ObjectMapperUtil.*;
+import static com.example.demo.util.ObjectMapperUtil.getMapper;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.mock;
@@ -28,6 +27,13 @@ public class PolygonControllerUnitTest {
     private static final String URL = "/polygon";
     private static final long ID = 1;
     private static final String NAME = "name";
+    private static final List<List<List<Double>>> COORDINATES = List.of(
+            List.of(
+                    List.of(1.5, 1.0),
+                    List.of(1.0, 1.0),
+                    List.of(1.5, 1.5),
+                    List.of(2.0, 1.5),
+                    List.of(1.5, 1.0)));
     private static final List<List<Point>> POINTS = List.of(
             List.of(
                     new Point(1.5, 1.0),
@@ -42,21 +48,21 @@ public class PolygonControllerUnitTest {
 
     @Test
     public void addPolygonTest() throws Exception {
-        PolygonDto dto = new PolygonDto(NAME, POINTS);
-        when(service.add(dto)).thenReturn(true);
+        GeoJsonPolygonGeometry geometry = new GeoJsonPolygonGeometry(COORDINATES);
+        when(service.add(geometry)).thenReturn(true);
         mockMvc.perform(post(URL)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(mapper.writeValueAsString(dto)))
+                .content(mapper.writeValueAsString(geometry)))
                 .andExpect(status().isOk());
     }
 
     @Test
     public void addPolygonBadRequestTest() throws Exception {
-        PolygonDto dto = new PolygonDto(NAME, POINTS);
-        when(service.add(dto)).thenReturn(false);
+        GeoJsonPolygonGeometry geometry = new GeoJsonPolygonGeometry(COORDINATES);
+        when(service.add(geometry)).thenReturn(false);
         mockMvc.perform(post(URL)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(mapper.writeValueAsString(dto)))
+                .content(mapper.writeValueAsString(geometry)))
                 .andExpect(status().isBadRequest());
     }
 
@@ -82,13 +88,7 @@ public class PolygonControllerUnitTest {
 
     @Test
     public void getPolygonIntersectionTest() throws Exception {
-        GeoJsonGeometry polygon = new GeoJsonPolygonGeometry(List.of(
-                List.of(
-                        List.of(1.5, 1.0),
-                        List.of(1.0, 1.0),
-                        List.of(1.5, 1.5),
-                        List.of(2.0, 1.5),
-                        List.of(1.5, 1.0))));
+        GeoJsonGeometry polygon = new GeoJsonPolygonGeometry(COORDINATES);
         when(service.getPolygonIntersection(ID, 2)).thenReturn(polygon);
         String content = mockMvc.perform(get(URL + "/intersection")
                 .param("firstId", "1")

@@ -14,28 +14,28 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class FeatureCollectionServiceImpl implements FeatureCollectionService {
-    private final FeatureCollectionRepository redisRepository;
+    private final FeatureCollectionRepository repository;
     private final GeoJsonGeometryService geometryService;
 
     @Override
     public long add(GeoJsonPolygonGeometry geometry) {
         FeatureCollection geometries = geometryService.getContainedInPolygonGeometries(geometry);
-        return redisRepository.add(geometries) ? geometries.getId() : 0;
+        repository.save(geometries);
+        return geometries.getId();
     }
 
     @Override
-
     public Optional<FeatureCollection> findById(long id) {
-        return Optional.of(redisRepository.findById(id));
+        return repository.findById(id);
     }
 
     @Override
     public List<FeatureCollection> getAll() {
-        return redisRepository.getAll();
+        return repository.getAll();
     }
 
     @Override
     public void delete(long id) {
-        redisRepository.delete(id);
+        repository.deleteById(id);
     }
 }

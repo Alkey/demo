@@ -1,16 +1,7 @@
 package com.example.demo.repository;
 
 import com.example.demo.entity.FeatureCollection;
+import org.springframework.data.repository.CrudRepository;
 
-import java.util.List;
-
-public interface FeatureCollectionRepository {
-
-    boolean add(FeatureCollection featureCollection);
-
-    FeatureCollection findById(long id);
-
-    List<FeatureCollection> getAll();
-
-    void delete(long id);
+public interface FeatureCollectionRepository extends CrudRepository<FeatureCollection, Long>, CustomFeatureCollectionRepository {
 }

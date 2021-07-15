@@ -9,14 +9,16 @@ import java.util.List;
 
 @Value
 public class PolygonWithAreaDto {
-    PolygonDto polygonDto;
+    String name;
+    List<List<Point>> points;
     double area;
 
     @JsonCreator
     public PolygonWithAreaDto(@JsonProperty("name") String name,
                               @JsonProperty("points") List<List<Point>> points,
                               @JsonProperty("area") double area) {
-        this.polygonDto = new PolygonDto(name, points);
+        this.name = name;
+        this.points = points;
         this.area = area;
     }
 }

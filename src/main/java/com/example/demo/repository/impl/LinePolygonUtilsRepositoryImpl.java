@@ -17,7 +17,7 @@ public class LinePolygonUtilsRepositoryImpl implements LinePolygonUtilsRepositor
 
     @Override
     public boolean isIntersects(long lineId, long polygonId) {
-        return dsl.select(PostGisUtil.stIntersects(LINE.GEOMETRY, POLYGON.GEOMETRY))
+        return dsl.select(PostGisUtil.isIntersects(LINE.GEOMETRY, POLYGON.GEOMETRY))
                 .from(LINE, POLYGON)
                 .where(LINE.ID.eq(lineId), POLYGON.ID.eq(polygonId))
                 .fetchOptionalInto(boolean.class)
@@ -26,11 +26,12 @@ public class LinePolygonUtilsRepositoryImpl implements LinePolygonUtilsRepositor
 
     @Override
     public boolean isWithIn(long lineId, long polygonId) {
-        return dsl.select(PostGisUtil.stWithIn(LINE.GEOMETRY, POLYGON.GEOMETRY))
+        return dsl.select(PostGisUtil.isWithIn(LINE.GEOMETRY, POLYGON.GEOMETRY))
                 .from(LINE, POLYGON)
                 .where(LINE.ID.eq(lineId), POLYGON.ID.eq(polygonId))
                 .fetchOptionalInto(boolean.class)
                 .orElseThrow(() -> new IllegalArgumentException(EXCEPTION_MESSAGE));
+
     }
 
     @Override

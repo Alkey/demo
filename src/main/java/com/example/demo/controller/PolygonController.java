@@ -1,8 +1,8 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.PolygonDto;
 import com.example.demo.dto.PolygonWithAreaDto;
 import com.example.demo.entity.GeoJsonGeometry;
+import com.example.demo.entity.GeoJsonPolygonGeometry;
 import com.example.demo.service.PolygonService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +19,8 @@ public class PolygonController {
 
     @PostMapping
     public ResponseEntity<Void> add(@RequestBody
-                                    @Valid PolygonDto dto) {
-        return service.add(dto) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
+                                    @Valid GeoJsonPolygonGeometry geometry) {
+        return service.add(geometry) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
     }
 
     @GetMapping("/{id}")

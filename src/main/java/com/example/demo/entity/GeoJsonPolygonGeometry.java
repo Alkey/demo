@@ -1,6 +1,5 @@
 package com.example.demo.entity;
 
-import com.example.demo.dto.PolygonDto;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Value;
@@ -22,19 +21,16 @@ public class GeoJsonPolygonGeometry implements GeoJsonGeometry {
         this.coordinates = coordinates;
     }
 
-    public PolygonDto toEntity() {
-        return new PolygonDto("Polygon", getPolygonPoints());
-    }
-
-    private List<List<Point>> getPolygonPoints() {
+    @Override
+    public String toWKTString() {
         return coordinates.stream()
-                .map(this::getPoints)
-                .collect(Collectors.toUnmodifiableList());
+                .map(this::getRing)
+                .collect(Collectors.joining(",", "POLYGON(", ")"));
     }
 
-    private List<Point> getPoints(List<List<Double>> points) {
+    private String getRing(List<List<Double>> points) {
         return points.stream()
-                .map(coordinates -> new Point(coordinates.get(0), coordinates.get(1)))
-                .collect(Collectors.toUnmodifiableList());
+                .map(coordinates -> coordinates.get(0) + " " + coordinates.get(1))
+                .collect(Collectors.joining(",", "(", ")"));
     }
 }

@@ -1,12 +1,14 @@
 package com.example.demo.entity;
 
-import lombok.Data;
+import lombok.Value;
+import org.springframework.data.redis.core.RedisHash;
 
 import java.io.Serializable;
 import java.util.List;
 
-@Data
+@Value
+@RedisHash("Feature")
 public class FeatureCollection implements Serializable {
-    private long id;
-    private List<GeoJsonGeometry> features;
+    long id;
+    List<GeoJsonGeometry> features;
 }

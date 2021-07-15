@@ -1,8 +1,6 @@
 package com.example.demo.converter;
 
 import com.example.demo.entity.GeoJsonGeometry;
-import com.example.demo.entity.GeoJsonLineGeometry;
-import com.example.demo.entity.GeoJsonPolygonGeometry;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.jooq.Converter;
 import org.springframework.stereotype.Component;
@@ -22,10 +20,7 @@ public class GeoJsonGeometryConverter implements Converter<String, GeoJsonGeomet
 
     @Override
     public String to(GeoJsonGeometry geometry) {
-        if (geometry.getType().equalsIgnoreCase("LineString")) {
-            return ((GeoJsonLineGeometry) geometry).toEntity().toString();
-        }
-        return ((GeoJsonPolygonGeometry) geometry).toEntity().toString();
+        return geometry.toWKTString();
     }
 
     @Override
