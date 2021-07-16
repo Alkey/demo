@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -22,14 +23,22 @@ public class FeatureCollectionController {
 
     @GetMapping("/{id}")
     public ResponseEntity<FeatureCollection> get(@PathVariable long id) {
-        return service.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.badRequest().build());
+        try {
+            return service.findById(id)
+                    .map(ResponseEntity::ok)
+                    .orElse(ResponseEntity.badRequest().build());
+        } catch (IOException e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @GetMapping("/all")
     public ResponseEntity<List<FeatureCollection>> getAll() {
-        return ResponseEntity.ok(service.getAll());
+        try {
+            return ResponseEntity.ok(service.getAll());
+        } catch (IOException e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @DeleteMapping("/{id}")
