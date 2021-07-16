@@ -1,5 +1,6 @@
 package com.example.demo.repository.impl;
 
+import com.example.demo.converter.GeoJsonGeometryConverter;
 import com.example.demo.entity.Line;
 import org.jooq.DSLContext;
 import org.junit.jupiter.api.AfterEach;
@@ -15,6 +16,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.val;
+import static org.mockito.Mockito.spy;
 
 public class LineRepositoryImplTest {
     private static final String NAME = "name";
@@ -22,7 +24,8 @@ public class LineRepositoryImplTest {
     private static final String LOCATION = "LINESTRING(28.49578857421875 49.26780455063753,28.500595092773438 49.24001745095546)";
     private static final String LOCATION_SECOND = "LINESTRING(28.47484588623047 49.2513358593714,28.515357971191406 49.24887068449445)";
     private static final DSLContext dsl = getConnection();
-    private final LineRepositoryImpl repository = new LineRepositoryImpl(dsl);
+    private final GeoJsonGeometryConverter converter = spy(GeoJsonGeometryConverter.class);
+    private final LineRepositoryImpl repository = new LineRepositoryImpl(converter, dsl);
 
     @Test
     public void addLineTest() {

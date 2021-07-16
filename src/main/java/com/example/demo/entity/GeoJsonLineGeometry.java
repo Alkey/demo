@@ -1,6 +1,5 @@
 package com.example.demo.entity;
 
-import com.example.demo.dto.LineDto;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Value;
@@ -22,14 +21,10 @@ public class GeoJsonLineGeometry implements GeoJsonGeometry {
         this.coordinates = coordinates;
     }
 
-    public LineDto toEntity() {
-        List<Point> points = getPoints();
-        return new LineDto("LineString", points.get(0), points.get(1));
-    }
-
-    private List<Point> getPoints() {
+    @Override
+    public String toWKTString() {
         return coordinates.stream()
-                .map(coordinates -> new Point(coordinates.get(0), coordinates.get(1)))
-                .collect(Collectors.toUnmodifiableList());
+                .map(coordinates -> coordinates.get(0) + " " + coordinates.get(1))
+                .collect(Collectors.joining(",", "LINESTRING(", ")"));
     }
 }

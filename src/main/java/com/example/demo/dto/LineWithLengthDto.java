@@ -7,7 +7,9 @@ import lombok.Value;
 
 @Value
 public class LineWithLengthDto {
-    LineDto lineDto;
+    String name;
+    Point startPoint;
+    Point endPoint;
     double length;
 
     @JsonCreator
@@ -15,7 +17,9 @@ public class LineWithLengthDto {
                              @JsonProperty("startPoint") Point startPoint,
                              @JsonProperty("endPoint") Point endPoint,
                              @JsonProperty("length") double length) {
-        this.lineDto = new LineDto(name, startPoint, endPoint);
+        this.name = name;
+        this.startPoint = startPoint;
+        this.endPoint = endPoint;
         this.length = length;
     }
 }

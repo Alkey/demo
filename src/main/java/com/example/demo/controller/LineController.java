@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.LineDto;
 import com.example.demo.dto.LineWithLengthDto;
+import com.example.demo.entity.GeoJsonLineGeometry;
 import com.example.demo.entity.Point;
 import com.example.demo.service.LineService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -16,8 +16,8 @@ public class LineController {
     private final LineService service;
 
     @PostMapping
-    public ResponseEntity<Void> add(@RequestBody LineDto dto) {
-        return service.add(dto) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
+    public ResponseEntity<Void> add(@RequestBody GeoJsonLineGeometry geometry) {
+        return service.add(geometry) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
     }
 
     @GetMapping("/{id}")

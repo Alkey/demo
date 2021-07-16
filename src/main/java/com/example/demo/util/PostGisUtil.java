@@ -28,12 +28,12 @@ public class PostGisUtil {
         return field("st_area({0}::geography)", double.class, geometryString);
     }
 
-    public static Field<String> stIntersects(Field<String> line, Field<String> polygon) {
-        return field("st_intersects({0}, {1})", String.class, line, polygon);
+    public static Field<Boolean> isIntersects(Field<String> line, Field<String> polygon) {
+        return field("st_intersects({0}, {1})", Boolean.class, line, polygon);
     }
 
-    public static Field<String> stWithIn(Field<String> line, Field<String> polygon) {
-        return field("st_within({0}::geometry, {1}::geometry)", String.class, line, polygon);
+    public static Field<Boolean> isWithIn(Field<String> line, Field<String> polygon) {
+        return field("st_within({0}::geometry, {1}::geometry)", Boolean.class, line, polygon);
     }
 
     public static Field<String> stDistance(Field<String> line, Field<String> polygon) {

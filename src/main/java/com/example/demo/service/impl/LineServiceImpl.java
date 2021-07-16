@@ -1,7 +1,7 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.dto.LineDto;
 import com.example.demo.dto.LineWithLengthDto;
+import com.example.demo.entity.GeoJsonGeometry;
 import com.example.demo.entity.Line;
 import com.example.demo.entity.Point;
 import com.example.demo.repository.LineRepository;
@@ -25,8 +25,8 @@ public class LineServiceImpl implements LineService {
     private final LineRepository repository;
 
     @Override
-    public boolean add(LineDto dto) {
-        return repository.add(dto.getName(), dto.toString()) > 0;
+    public boolean add(GeoJsonGeometry geometry) {
+        return repository.add(geometry.getType(), geometry.toWKTString()) > 0;
     }
 
     @Override
@@ -48,8 +48,14 @@ public class LineServiceImpl implements LineService {
         return getPoint(repository.getLineStringIntersection(firstLineId, secondLineId));
     }
 
+    @Override
+    public List<GeoJsonGeometry> getContainedInPolygonLines(String polygon) {
+        return repository.getContainedInPolygonGeometries(polygon);
+    }
+
     private Optional<Point> getPoint(String geometry) throws JsonProcessingException {
-        List<Double> coordinates = getMapper().readValue(geometry, new TypeReference<>() {});
+        List<Double> coordinates = getMapper().readValue(geometry, new TypeReference<>() {
+        });
         if (coordinates.size() >= 2) {
             return Optional.of(new Point(coordinates.get(0), coordinates.get(1)));
         }
@@ -57,7 +63,8 @@ public class LineServiceImpl implements LineService {
     }
 
     private List<Point> getPoints(String line) throws JsonProcessingException {
-        return getMapper().readValue(line, new TypeReference<List<List<Double>>>() {}).stream()
+        return getMapper().readValue(line, new TypeReference<List<List<Double>>>() {
+        }).stream()
                 .filter(coordinates -> coordinates.size() >= 2)
                 .map(coordinates -> new Point(coordinates.get(0), coordinates.get(1)))
                 .collect(Collectors.toUnmodifiableList());

@@ -1,7 +1,9 @@
 package com.example.demo.repository;
 
+import com.example.demo.entity.GeoJsonGeometry;
 import com.example.demo.entity.Line;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface LineRepository {
@@ -11,4 +13,6 @@ public interface LineRepository {
     Optional<Line> findById(long id);
 
     String getLineStringIntersection(long firstLineId, long secondLineId);
+
+    List<GeoJsonGeometry> getContainedInPolygonGeometries(String polygon);
 }

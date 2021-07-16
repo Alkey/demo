@@ -28,7 +28,7 @@ public class GeoJsonGeometryServiceImplTest {
         GeoJsonLineGeometry lineString = new GeoJsonLineGeometry(List.of(
                 getListWithRandomDoubles(),
                 getListWithRandomDoubles()));
-        when(lineService.add(lineString.toEntity())).thenReturn(true);
+        when(lineService.add(lineString)).thenReturn(true);
 
         assertThat(service.add(lineString), is(true));
     }
@@ -40,7 +40,7 @@ public class GeoJsonGeometryServiceImplTest {
                 getListWithRandomDoubles(),
                 getListWithRandomDoubles(),
                 getListWithRandomDoubles())));
-        when(polygonService.add(polygon.toEntity())).thenReturn(true);
+        when(polygonService.add(polygon)).thenReturn(true);
 
         assertThat(service.add(polygon), is(true));
     }

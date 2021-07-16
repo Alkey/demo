@@ -1,6 +1,5 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.dto.PolygonDto;
 import com.example.demo.dto.PolygonWithAreaDto;
 import com.example.demo.entity.GeoJsonGeometry;
 import com.example.demo.entity.Point;
@@ -26,8 +25,8 @@ public class PolygonServiceImpl implements PolygonService {
     private final PolygonRepository repository;
 
     @Override
-    public boolean add(PolygonDto dto) {
-        return repository.add(dto.getName(), dto.toString()) > 0;
+    public boolean add(GeoJsonGeometry geometry) {
+        return repository.add(geometry.getType(), geometry.toWKTString()) > 0;
     }
 
     @Override
@@ -46,8 +45,14 @@ public class PolygonServiceImpl implements PolygonService {
         return getMapper().readValue(repository.getPolygonIntersection(firstPolygonId, secondPolygonId), GeoJsonGeometry.class);
     }
 
+    @Override
+    public List<GeoJsonGeometry> getContainedInPolygonGeometries(String polygon) {
+        return repository.getContainedInPolygonGeometries(polygon);
+    }
+
     private List<List<Point>> getPolygonPoints(String geometry) throws JsonProcessingException {
-        List<List<List<Double>>> polygonPoints = getMapper().readValue(geometry, new TypeReference<>() {});
+        List<List<List<Double>>> polygonPoints = getMapper().readValue(geometry, new TypeReference<>() {
+        });
         return polygonPoints.stream()
                 .map(this::getPoints)
                 .collect(Collectors.toUnmodifiableList());

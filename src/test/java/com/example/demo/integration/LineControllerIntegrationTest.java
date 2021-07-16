@@ -1,7 +1,7 @@
 package com.example.demo.integration;
 
-import com.example.demo.dto.LineDto;
 import com.example.demo.dto.LineWithLengthDto;
+import com.example.demo.entity.GeoJsonLineGeometry;
 import com.example.demo.entity.Point;
 import org.jooq.DSLContext;
 import org.junit.jupiter.api.AfterEach;
@@ -41,8 +41,8 @@ public class LineControllerIntegrationTest {
 
     @Test
     public void addLineTest() {
-        LineDto dto = new LineDto(NAME, new Point(0, 1), new Point(1, 1));
-        ResponseEntity<Void> responseEntity = restTemplate.postForEntity(URL + port + "line", dto, Void.class);
+        GeoJsonLineGeometry geometry = new GeoJsonLineGeometry(List.of(List.of(0.0, 1.0), List.of(1.0, 1.0)));
+        ResponseEntity<Void> responseEntity = restTemplate.postForEntity(URL + port + "line", geometry, Void.class);
         assertThat(responseEntity.getStatusCode(), is(HttpStatus.OK));
     }
 
