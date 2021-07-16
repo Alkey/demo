@@ -3,8 +3,6 @@ package com.example.demo.entity;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
-import java.io.Serializable;
-
 import static com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 
 
@@ -14,7 +12,7 @@ import static com.fasterxml.jackson.annotation.JsonSubTypes.Type;
         @Type(value = GeoJsonLineGeometry.class, name = "LineString"),
         @Type(value = GeoJsonPolygonGeometry.class, name = "Polygon")
 })
-public interface GeoJsonGeometry extends Serializable {
+public interface GeoJsonGeometry {
 
     String getType();
 

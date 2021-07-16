@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.entity.FeatureCollection;
 import com.example.demo.entity.GeoJsonPolygonGeometry;
 import com.example.demo.service.FeatureCollectionService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +19,11 @@ public class FeatureCollectionController {
 
     @PostMapping
     public ResponseEntity<Long> add(@RequestBody GeoJsonPolygonGeometry geometry) {
-        return ResponseEntity.ok(service.add(geometry));
+        try {
+            return ResponseEntity.ok(service.add(geometry));
+        } catch (JsonProcessingException e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @GetMapping("/{id}")

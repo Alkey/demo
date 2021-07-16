@@ -4,11 +4,10 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Value;
 
-import java.io.Serializable;
 import java.util.List;
 
 @Value
-public class FeatureCollection implements Serializable {
+public class FeatureCollection {
     long id;
     List<GeoJsonGeometry> features;
 

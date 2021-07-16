@@ -7,8 +7,8 @@ import com.example.demo.entity.GeoJsonPolygonGeometry;
 import com.example.demo.repository.FeatureCollectionWrapperRepository;
 import com.example.demo.service.FeatureCollectionService;
 import com.example.demo.service.GeoJsonGeometryService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -23,9 +23,8 @@ public class FeatureCollectionServiceImpl implements FeatureCollectionService {
     private final GeoJsonGeometryService geometryService;
     private final FeatureCollectionConverter converter;
 
-    @SneakyThrows
     @Override
-    public long add(GeoJsonPolygonGeometry geometry) {
+    public long add(GeoJsonPolygonGeometry geometry) throws JsonProcessingException {
         FeatureCollection featureCollection = geometryService.getContainedInPolygonGeometries(geometry);
         FeatureCollectionWrapper wrapper = converter.toWrapper(featureCollection);
         repository.save(wrapper);
@@ -34,10 +33,10 @@ public class FeatureCollectionServiceImpl implements FeatureCollectionService {
 
     @Override
     public Optional<FeatureCollection> findById(long id) throws IOException {
-        Optional<FeatureCollectionWrapper> byId = repository.findById(id);
-        if (byId.isPresent()) {
-            FeatureCollectionWrapper wrap = byId.get();
-            return Optional.of(converter.fromWrapper(wrap));
+        Optional<FeatureCollectionWrapper> optional = repository.findById(id);
+        if (optional.isPresent()) {
+            FeatureCollectionWrapper wrapper = optional.get();
+            return Optional.of(converter.fromWrapper(wrapper));
         }
         return Optional.empty();
     }
