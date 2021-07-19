@@ -12,11 +12,12 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+import static com.example.demo.config.RedisConfig.ALL_PRODUCTS;
+import static com.example.demo.config.RedisConfig.PRODUCTS;
+
 @Service
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
-    private static final String PRODUCTS = "products";
-    private static final String ALL_PRODUCTS = "allProducts";
     private final ProductRepository productRepository;
 
     @CacheEvict(value = ALL_PRODUCTS, allEntries = true)
