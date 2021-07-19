@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -59,7 +60,7 @@ public class BackupGeometryDataServiceImpl implements BackupGeometryDataService 
         return false;
     }
 
-    @Scheduled(cron = "0 0/15 * 1/1 * ?")
+    @Scheduled(cron = "0 0/15 * * * ?")
     public void backupGeometries() throws IOException, InterruptedException {
         File file = new File(BACKUP_FILE_NAME);
         ProcessBuilder builder = new ProcessBuilder(getBackupCommand(file.getAbsolutePath()));
