@@ -59,13 +59,13 @@ public class BackupGeometryDataServiceImpl implements BackupGeometryDataService 
         return false;
     }
 
-    @Scheduled(cron = "* */15 * * * *")
+    @Scheduled(cron = "0 0/15 * 1/1 * ?")
     public void backupGeometries() throws IOException, InterruptedException {
         File file = new File(BACKUP_FILE_NAME);
         ProcessBuilder builder = new ProcessBuilder(getBackupCommand(file.getAbsolutePath()));
         builder.environment().put("PGPASSWORD", password);
         if (builder.start().waitFor() == 0) {
-//            amazonS3Service.save(BACKUP_FILE_NAME, file);
+            amazonS3Service.save(BACKUP_FILE_NAME, file);
             file.delete();
         } else {
             throw new RuntimeException("Can't create backup.sql");
