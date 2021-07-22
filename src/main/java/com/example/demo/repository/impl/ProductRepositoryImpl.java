@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import static com.example.demo.jooq.sample.model.tables.Product.PRODUCT;
 
@@ -36,5 +37,12 @@ public class ProductRepositoryImpl implements ProductRepository {
         return dsl.deleteFrom(PRODUCT)
                 .where(PRODUCT.ID.eq(id))
                 .execute();
+    }
+
+    @Override
+    public Optional<Product> findById(long id) {
+        return dsl.selectFrom(PRODUCT)
+                .where(PRODUCT.ID.eq(id))
+                .fetchOptionalInto(Product.class);
     }
 }

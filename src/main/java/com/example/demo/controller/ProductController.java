@@ -30,4 +30,11 @@ public class ProductController {
     public ResponseEntity<String> delete(@PathVariable long id) {
         return productService.delete(id) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Product> findById(@PathVariable long id) {
+        return productService.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.badRequest().build());
+    }
 }
