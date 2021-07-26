@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.Product;
+import com.example.demo.service.ProductCheckService;
 import com.example.demo.service.ProductService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -11,7 +12,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.List;
 
-import static com.example.demo.util.ObjectMapperUtil.*;
+import static com.example.demo.util.ObjectMapperUtil.getMapper;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.mock;
@@ -23,7 +24,8 @@ public class ProductControllerUnitTest {
     private static final String URL = "/products";
     private static final long ID = 1;
     private final ProductService service = mock(ProductService.class);
-    private final ProductController controller = new ProductController(service);
+    private final ProductCheckService checkService = mock(ProductCheckService.class);
+    private final ProductController controller = new ProductController(service, checkService);
     private final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     private final ObjectMapper mapper = getMapper();
 
