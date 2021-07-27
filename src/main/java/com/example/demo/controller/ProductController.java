@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequiredArgsConstructor
@@ -44,15 +43,7 @@ public class ProductController {
 
     @PostMapping("/check")
     public ResponseEntity<Void> check(@RequestBody List<Long> productIds) {
-        if (productCheckService.isComplete()) {
-            try {
-                productCheckService.checkProducts(productIds);
-            } catch (InterruptedException | ExecutionException e) {
-                return ResponseEntity.badRequest().build();
-            }
-            return ResponseEntity.ok().build();
-        }
-        return ResponseEntity.badRequest().build();
+        return productCheckService.checkProducts(productIds) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
     }
 
     @GetMapping("/check")

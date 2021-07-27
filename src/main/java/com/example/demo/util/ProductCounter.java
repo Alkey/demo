@@ -1,27 +1,22 @@
 package com.example.demo.util;
 
-import lombok.Data;
-import org.springframework.stereotype.Component;
+import lombok.Getter;
 
-import java.util.ArrayList;
-import java.util.List;
-
-@Component
-@Data
+@Getter
 public class ProductCounter {
     private int count;
-    private int quantity;
-    private List<Boolean> result = new ArrayList<>();
+    private final int total;
+    private int validProductsCount;
 
-    public void increment() {
-        synchronized (this) {
-            count += 1;
-        }
+    public ProductCounter(int total) {
+        this.total = total;
     }
 
-    public void setResult(boolean isValid) {
-        synchronized (this) {
-            result.add(isValid);
-        }
+    public synchronized void increment() {
+        count++;
+    }
+
+    public synchronized void addValidProductsCount() {
+        validProductsCount++;
     }
 }
