@@ -15,7 +15,6 @@ public class ProductValidator {
             LocalDateTime past = now();
             while (now().isBefore(past.plusSeconds(3))) {
             }
-            System.out.println(Thread.currentThread().getName());
             return id % 2 == 0;
         });
     }
