@@ -42,12 +42,14 @@ public class ProductController {
     }
 
     @PostMapping("/check")
-    public ResponseEntity<Void> check(@RequestBody List<Long> productIds) {
-        return productCheckService.checkProducts(productIds) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
+    public ResponseEntity<Integer> check(@RequestBody List<Long> productIds) {
+        return ResponseEntity.ok(productCheckService.checkProducts(productIds));
     }
 
-    @GetMapping("/check")
-    public ResponseEntity<ProductCounter> getCount() {
-        return ResponseEntity.ok(productCheckService.getResult());
+    @GetMapping("/check/{id}")
+    public ResponseEntity<ProductCounter> findCount(@PathVariable int id) {
+        return productCheckService.findResult(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.badRequest().build());
     }
 }

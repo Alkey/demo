@@ -1,45 +1,45 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.util.ProductValidator;
 import com.example.demo.service.ProductCheckService;
 import com.example.demo.util.ProductCounter;
+import com.example.demo.util.ProductValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 @Service
 @RequiredArgsConstructor
 public class ProductCheckServiceImpl implements ProductCheckService {
     private final ProductValidator validator;
-    private ProductCounter counter;
+    private final ConcurrentMap<Integer, ProductCounter> counters = new ConcurrentHashMap<>();
 
     @Override
-    public boolean checkProducts(List<Long> productIds) {
-        if (isProcessOver()) {
-            counter = new ProductCounter(productIds.size());
-            productIds.forEach(this::validate);
-            return true;
+    public int checkProducts(List<Long> productIds) {
+        int counterId = productIds.hashCode();
+        if (!counters.containsKey(counterId)) {
+            counters.put(counterId, new ProductCounter(productIds.size()));
+            productIds.forEach(productId -> validate(productId, counterId));
         }
-        return false;
+        return counterId;
     }
 
     @Override
-    public ProductCounter getResult() {
-        return counter;
+    public Optional<ProductCounter> findResult(int counterId) {
+        return Optional.ofNullable(counters.get(counterId));
     }
 
-    private boolean isProcessOver() {
-        return counter == null || counter.getCount() == counter.getTotal();
+    private void validate(long productId, int counterId) {
+        validator.validateProduct(productId).thenAccept(valid -> checkIsValidProduct(valid, counterId));
     }
 
-    private void validate(long id) {
-        validator.validateProduct(id).thenAccept(this::checkIsValidProduct);
-    }
-
-    private void checkIsValidProduct(boolean isTrue) {
+    private void checkIsValidProduct(boolean valid, int counterId) {
+        ProductCounter counter = counters.get(counterId);
         counter.increment();
-        if (isTrue) {
+        if (valid) {
             counter.addValidProductsCount();
         }
     }
