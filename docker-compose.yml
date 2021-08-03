@@ -1,14 +1,6 @@
 version: '3.0'
 services:
-#  app:
-#    image: docker.io/library/demo:0.0.1-SNAPSHOT
-##    build: .
-#    ports:
-#      - "8080:8080"
-#    depends_on:
-#      - db
-#      - db-test
-#      - redis
+
   db:
     image: postgis/postgis
     environment:
@@ -18,7 +10,7 @@ services:
       - POSTGRES_DB=mydb
     ports:
       - "5432:5432"
-
+    command: -p 5432
   db-test:
     image: postgis/postgis
     environment:
@@ -49,7 +41,18 @@ services:
       - prometheus
     ports:
       - "3000:3000"
-
+  app:
+    image: docker.io/library/demo:0.0.1-SNAPSHOT
+    environment:
+      - DB_HOST=localhost
+      - DB_PASSWORD=root
+      - DB_PORT=5432
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+      - db-test
+      - redis
 volumes:
   prometheus_data: {}
   grafana_data: {}

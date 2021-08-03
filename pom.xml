@@ -129,7 +129,14 @@
                                 org.jooq.meta.postgres.PostgresDatabase
                             </name>
                             <includes>client|product|line|polygon</includes>
-                            <inputSchema>public</inputSchema>
+                            <schemata>
+                                <schema>
+                                    <inputSchema>public</inputSchema>
+                                </schema>
+                                <schema>
+                                    <inputSchema>foo</inputSchema>
+                                </schema>
+                            </schemata>
                         </database>
                         <generate>
                             <records>true</records>
