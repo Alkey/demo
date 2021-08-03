@@ -14,9 +14,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 
 import static com.example.demo.ConnectionUtils.getConnection;
-import static com.example.demo.jooq.sample.model.tables.Line.LINE;
-import static com.example.demo.jooq.sample.model.tables.Polygon.POLYGON;
 import static com.example.demo.util.PostGisUtil.*;
+import static jooq.tables.Line.LINE;
+import static jooq.tables.Polygon.POLYGON;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.jooq.impl.DSL.field;

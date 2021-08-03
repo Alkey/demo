@@ -8,7 +8,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static com.example.demo.ConnectionUtils.getConnection;
-import static com.example.demo.jooq.sample.model.tables.Client.CLIENT;
+import static jooq.tables.Client.CLIENT;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 

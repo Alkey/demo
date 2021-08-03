@@ -10,7 +10,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.example.demo.jooq.sample.model.tables.Product.PRODUCT;
+import static jooq.tables.Product.PRODUCT;
+
 
 @Repository
 @RequiredArgsConstructor

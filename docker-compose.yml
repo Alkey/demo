@@ -1,0 +1,55 @@
+version: '3.0'
+services:
+#  app:
+#    image: docker.io/library/demo:0.0.1-SNAPSHOT
+##    build: .
+#    ports:
+#      - "8080:8080"
+#    depends_on:
+#      - db
+#      - db-test
+#      - redis
+  db:
+    image: postgis/postgis
+    environment:
+      - PGDATA=/var/lib/postgresql/data
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_USER=admin
+      - POSTGRES_DB=mydb
+    ports:
+      - "5432:5432"
+
+  db-test:
+    image: postgis/postgis
+    environment:
+      - PGDATA=/var/lib/postgresql/data
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=foo
+    ports:
+      - "5433:5433"
+    command: -p 5433
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+
+  grafana:
+    image: grafana/grafana
+    user: "472"
+    depends_on:
+      - prometheus
+    ports:
+      - "3000:3000"
+
+volumes:
+  prometheus_data: {}
+  grafana_data: {}

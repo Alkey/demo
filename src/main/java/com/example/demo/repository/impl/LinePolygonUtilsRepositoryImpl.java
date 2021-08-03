@@ -6,8 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
 
-import static com.example.demo.jooq.sample.model.tables.Line.LINE;
-import static com.example.demo.jooq.sample.model.tables.Polygon.POLYGON;
+import static jooq.tables.Line.LINE;
+import static jooq.tables.Polygon.POLYGON;
 
 @Repository
 @RequiredArgsConstructor
