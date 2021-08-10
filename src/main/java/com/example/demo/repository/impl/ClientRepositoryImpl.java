@@ -10,7 +10,8 @@ import org.springframework.stereotype.Repository;
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.example.demo.jooq.sample.model.tables.Client.CLIENT;
+import static jooq.Tables.CLIENT;
+
 
 @Repository
 @RequiredArgsConstructor

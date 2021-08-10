@@ -1,7 +1,7 @@
 package com.example.demo.repository.impl;
 
 import com.example.demo.entity.Product;
-import com.example.demo.jooq.sample.model.tables.records.ProductRecord;
+import jooq.tables.records.ProductRecord;
 import org.jooq.DSLContext;
 import org.jooq.InsertValuesStep2;
 import org.junit.jupiter.api.AfterEach;
@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static com.example.demo.ConnectionUtils.getConnection;
-import static com.example.demo.jooq.sample.model.tables.Product.PRODUCT;
+import static jooq.tables.Product.PRODUCT;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 

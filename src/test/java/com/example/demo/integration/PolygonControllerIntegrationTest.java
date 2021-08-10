@@ -19,9 +19,9 @@ import java.net.URI;
 import java.util.List;
 
 import static com.example.demo.ConnectionUtils.getConnection;
-import static com.example.demo.jooq.sample.model.tables.Polygon.POLYGON;
 import static com.example.demo.util.PostGisUtil.stArea;
 import static com.example.demo.util.PostGisUtil.stGeomFromText;
+import static jooq.tables.Polygon.POLYGON;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.jooq.impl.DSL.field;

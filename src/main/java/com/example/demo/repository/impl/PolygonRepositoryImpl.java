@@ -11,8 +11,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
-import static com.example.demo.jooq.sample.model.tables.Polygon.POLYGON;
 import static com.example.demo.util.PostGisUtil.*;
+import static jooq.tables.Polygon.POLYGON;
 import static org.jooq.impl.DSL.*;
 
 @Repository
