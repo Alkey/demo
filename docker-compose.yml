@@ -1,8 +1,8 @@
-version: '3.0'
+version: "3.0"
 services:
-
   db:
     image: postgis/postgis
+    container_name: db
     environment:
       - PGDATA=/var/lib/postgresql/data
       - POSTGRES_PASSWORD=root
@@ -11,8 +11,10 @@ services:
     ports:
       - "5432:5432"
     command: -p 5432
-  db-test:
+
+  db_test:
     image: postgis/postgis
+    container_name: db_test
     environment:
       - PGDATA=/var/lib/postgresql/data
       - POSTGRES_PASSWORD=root
@@ -22,8 +24,9 @@ services:
       - "5433:5433"
     command: -p 5433
 
-  redis:
-    image: redis:alpine
+  redis-db:
+    container_name: redis
+    image: redis:latest
     ports:
       - "6379:6379"
 
@@ -31,28 +34,25 @@ services:
     image: prom/prometheus
     ports:
       - "9090:9090"
-    volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
 
   grafana:
     image: grafana/grafana
-    user: "472"
-    depends_on:
-      - prometheus
+    environment:
+     - GF_SECURITY_ADMIN_PASSWORD=admin
     ports:
       - "3000:3000"
+
   app:
-    image: docker.io/library/demo:0.0.1-SNAPSHOT
+    build: .
     environment:
-      - DB_HOST=localhost
-      - DB_PASSWORD=root
-      - DB_PORT=5432
+      - PASSWORD=admin
+      - DB_URL=jdbc:postgresql://db:5432/mydb
+      - DB_TEST_URL=jdbc:postgresql://db_test:5433/foo
+      - POSTGRES_HOST=db
+      - REDIS_HOST=redis
     ports:
       - "8080:8080"
     depends_on:
       - db
-      - db-test
-      - redis
-volumes:
-  prometheus_data: {}
-  grafana_data: {}
+      - db_test
+      - redis-db

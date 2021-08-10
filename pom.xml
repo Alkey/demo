@@ -119,7 +119,7 @@
                 <configuration>
                     <skip>true</skip>
                     <jdbc>
-                        <url>jdbc:postgresql://localhost:5432/mydb</url>
+                        <url>${env.DB_URL}</url>
                         <user>admin</user>
                         <password>root</password>
                     </jdbc>
