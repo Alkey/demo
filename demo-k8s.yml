@@ -1,0 +1,202 @@
+ apiVersion: apps/v1
+ kind: Deployment
+ metadata: 
+   name: mydb-deploy
+   labels:
+     app: mydb
+ spec:
+   replicas: 1
+   selector: 
+     matchLabels: 
+       app: mydb
+   template:
+     metadata: 
+       labels:
+         app: mydb
+     spec: 
+       containers:
+         - name: mydb
+           image: postgis/postgis:latest
+           env:
+             - name: PGDATA
+               value: "/var/lib/postgresql/data"
+             - name: POSTGRES_PASSWORD
+               value: "root"
+             - name: POSTGRES_USER
+               value: "admin"
+             - name: POSTGRES_DB
+               value: "mydb"
+           ports:
+             - containerPort: 5432
+---
+ apiVersion: apps/v1
+ kind: Deployment
+ metadata: 
+   name: testdb
+   labels:
+     app: test-db
+ spec:
+   replicas: 1
+   selector: 
+     matchLabels: 
+       app: test-db
+   template:
+     metadata: 
+       labels:
+         app: test-db
+     spec:
+       containers:
+         - name: test-db
+           image: postgis/postgis:latest
+           env:
+             - name: PGDATA
+               value: "/var/lib/postgresql/data"
+             - name: POSTGRES_PASSWORD
+               value: "root"
+             - name: POSTGRES_USER
+               value: "postgres"
+             - name: POSTGRES_DB
+               value: "foo"
+           ports:
+             - containerPort: 5433
+---
+ apiVersion: apps/v1
+ kind: Deployment
+ metadata:
+   name: redis
+   labels:
+     app: redis-db
+ spec:
+   replicas: 1
+   selector: 
+     matchLabels: 
+       app: redis-db
+   template:
+     metadata: 
+       labels:
+         app: redis-db
+     spec:
+       containers:
+         - name: redis
+           image: redis:latest
+           ports: 
+             - containerPort: 6379
+---
+ apiVersion: apps/v1
+ kind: Deployment
+ metadata:
+   name: appl
+   labels:
+     project: demo
+ spec:
+   replicas: 2
+   selector: 
+     matchLabels: 
+       project: demo
+   template:
+     metadata: 
+       labels:
+         project: demo
+     spec:
+       containers:
+         - name: demo-app
+           image: alkey123/demo:ver1
+           env:
+             - name: PASSWORD
+               value: "admin"
+             - name: DB_URL
+               value: "jdbc:postgresql://mydb-svc:5432/mydb"
+             - name: DB_TEST_URL
+               value: "jdbc:postgresql://my-test-db-svc:5433/foo"
+             - name: POSTGRES_HOST
+               value: "mydb-svc"
+             - name: REDIS_HOST
+               value: "redis-svc"
+           ports:
+             - containerPort: 8080
+---
+ apiVersion: v1
+ kind: Service
+ metadata:
+   name: app
+   labels:
+     env: prod
+     owner: Ivan
+ spec:
+   selector:
+     project: demo
+   ports:
+     - name: app-listener
+       protocol: TCP
+       port: 8080
+       targetPort: 8080
+       nodePort: 30007
+   type: LoadBalancer
+---
+ apiVersion: v1
+ kind: Service
+ metadata:
+   name: mydb-svc
+   labels:
+     env: prod
+     owner: Ivan
+ spec:
+   selector:
+     app: mydb
+   ports:
+     - name: mydb-listener
+       protocol: TCP
+       port: 5432
+       targetPort: 5432
+   type: NodePort
+---
+ apiVersion: v1
+ kind: Service
+ metadata:
+   name: my-test-db-svc
+   labels:
+     env: prod
+     owner: Ivan
+ spec:
+   selector:
+     app: test-db
+   ports:
+     - name: test-db-listener
+       protocol: TCP
+       port: 5433
+       targetPort: 5433
+   type: NodePort
+---
+ apiVersion: v1
+ kind: Service
+ metadata:
+   name: redis-svc
+   labels:
+     env: prod
+     owner: Ivan
+ spec:
+   selector:
+     app: redis-db
+   ports:
+     - name: redis-listener
+       protocol: TCP
+       port: 6379
+       targetPort: 6379
+   type: NodePort
+---
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: app-scaler
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: appl
+  minReplicas: 2
+  maxReplicas: 3
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      targetAverageUtilization: 2
