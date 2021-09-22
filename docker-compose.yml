@@ -9,8 +9,8 @@ services:
       - POSTGRES_USER=admin
       - POSTGRES_DB=mydb
     ports:
-      - "5432:5432"
-    command: -p 5432
+      - "5436:5436"
+    command: -p 5436
 
   db_test:
     image: postgis/postgis
@@ -21,19 +21,19 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_DB=foo
     ports:
-      - "5433:5433"
-    command: -p 5433
+      - "5435:5435"
+    command: -p 5435
 
   redis-db:
     container_name: redis
     image: redis:latest
     ports:
-      - "6379:6379"
+      - "6380:6380"
 
   prometheus:
     image: prom/prometheus
     ports:
-      - "9090:9090"
+      - "9091:9091"
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
 
@@ -48,8 +48,8 @@ services:
     build: .
     environment:
       - PASSWORD=admin
-      - DB_URL=jdbc:postgresql://db:5432/mydb
-      - DB_TEST_URL=jdbc:postgresql://db_test:5433/foo
+      - DB_URL=jdbc:postgresql://db:5436/mydb
+      - DB_TEST_URL=jdbc:postgresql://db_test:5435/foo
       - POSTGRES_HOST=db
       - REDIS_HOST=redis
     ports:
