@@ -45,7 +45,8 @@ services:
       - "3000:3000"
 
   app:
-    build: .
+#    build: .
+    image: alkey123/demo:latest
     environment:
       - PASSWORD=admin
       - DB_URL=jdbc:postgresql://db:5436/mydb
