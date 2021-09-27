@@ -26,4 +26,10 @@ public class ClientController {
                                           @PathVariable Role role) {
         return clientService.setRole(clientId, role) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
     }
+
+    @GetMapping("/test")
+    public  ResponseEntity<String> test() {
+        return ResponseEntity.ok("Hello World!");
+    }
+
 }
